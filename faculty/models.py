@@ -20,7 +20,7 @@ class Complain(models.Model):
     heading = models.CharField(max_length=300)
     description = models.CharField(max_length=5000)
     registered_to = models.ForeignKey('faculty', on_delete=models.CASCADE)
-    complain_response_date = models.DateTimeField(default=now)
+    complain_response_date = models.DateTimeField(default=now, db_index=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.IntegerField(max_length=1,default=" ",null=True)
     completed = models.BooleanField(default=False)

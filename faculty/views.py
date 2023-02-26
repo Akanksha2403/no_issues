@@ -1,5 +1,5 @@
 from datetime import datetime, date, timedelta
-# from tkinter import N
+from tkinter import N
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.shortcuts import HttpResponse
@@ -8,7 +8,6 @@ from student.models import Student
 from faculty.forms import ComplainForm
 from django.contrib import messages
 
-# Create your views here.
 
 today_date = None
 def update_tree():
@@ -19,6 +18,7 @@ def update_tree():
         obj.complain_response_date = today_date+timedelta(days=2)
         obj.registered_to = obj.registered_to.parent
         obj.save()
+
 
 
 def report(request):
@@ -38,7 +38,6 @@ def report(request):
     else:
         messages.error(request, 'Only faculty is allowed to view complaints')
         return redirect('/home')
-    return render(request, 'faculty/index.html', {'allcomplains': allcomplains, 'allfaculty':allfaculty})
 
 # API's here
 def search(request):
