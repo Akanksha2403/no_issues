@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'faculty',
     'student',
     'allauth',
+    # 'social_django',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
@@ -47,12 +48,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.twitter',
 ]
-# AUTHENTICATION_BACKENDS = (
-#     "allauth.account.auth_backends.AuthenticationBackend",
-# )
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
+    "allauth.account.auth_backends.AuthenticationBackend",
 )
 SITE_ID = 1
 MIDDLEWARE = [
@@ -94,8 +93,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-LOGIN_URL = '/login'
-LOGOUT_URL = '/logout'
+LOGIN_URL = '/'
+LOGOUT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 
 # Password validation
