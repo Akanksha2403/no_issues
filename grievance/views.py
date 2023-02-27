@@ -55,16 +55,12 @@ def handleSignUp(request):
     else:
         return HttpResponse("404 - Not found")
 
-    return HttpResponse("login")
 
 def handleLogin(request):
     if request.method == "POST":
-        # Get the post parameters
         loginusername = request.POST['loginusername']
         loginpassword = request.POST['loginpassword']
-
         user = authenticate(username = loginusername, password = loginpassword)
-
         if user is not None:
             login(request, user)
             messages.success(request, "Successfully loged in")

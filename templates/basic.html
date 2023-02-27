@@ -4,215 +4,344 @@
 <!doctype html>
 <html lang="en">
 
-
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Allison&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-    <title>{% block title%} {% endblock %}</title>
-    <style>
-       {% block css %} {% endblock %}
-
-
-
-    </style>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Allison&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+  <title>{% block title%} {% endblock %}</title>
+  <style>
+    {% block css %}{% endblock %}
+  </style>
 </head>
+
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background: #011c60; display: flex; justify-content: space-between">
-        <span class="badge rounded-circle ml-2"> <a class="navbar-brand" href="/"
-                                                    style="color: rgb(255, 255, 255); font-family: 'Allison', cursive;  font-stretch: expanded;  font-size: 54px;  font-weight: 800; margin-top: -1%; margin-bottom: -1%;">Grievance</a></span>
+  <nav class="navbar navbar-expand-lg navbar-dark"
+    style="background: #011c60; display: flex; justify-content: space-between">
+    <span class="badge rounded-circle ml-2"> <a class="navbar-brand" href="/"
+        style="color: rgb(255, 255, 255); font-family: 'Allison', cursive;  font-stretch: expanded;  font-size: 54px;  font-weight: 800; margin-top: -1%; margin-bottom: -1%;">Grievance</a></span>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
-    <form style="display: none"method='get' action='/shop/search/' class="form-inline" style="margin:auto">
-        <input class="form-control mr-sm-2" style="width: 450px" type="search" placeholder="Search"
-               aria-label="Search" name="search" id="search" style="margin-left:25%">
+    <form style="display: none" method='get' action='/shop/search/' class="form-inline" style="margin:auto">
+      <input class="form-control mr-sm-2" style="width: 450px" type="search" placeholder="Search" aria-label="Search"
+        name="search" id="search" style="margin-left:25%">
     </form>
 
 
-{% if user.is_authenticated  %}
+    {% if user.is_authenticated %}
     <ul class="navbar-nav mr-2">
       <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle text-white"  href='#'  id="navbarDropdown" role="button" data-toggle="dropdown"> Welcome {{request.user}}</a>
-      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/logout">Logout</a>
-              </div>
-            </li>
-            </ul>
-            </div>
+        <a class="nav-link dropdown-toggle text-white" href='#' id="navbarDropdown" role="button"
+          data-toggle="dropdown"> Welcome {{request.user}}</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+    </div>
     {% else %}
 
-<div style="display: flex">
-<button type="button" class="btn  mr-2" data-toggle="modal" data-target="#loginModal" style=" background-color:#fefefe; color: rgb(1, 124, 161);">
-Login
-</button>
+    <div style="display: flex">
+      <button type="button" class="btn  mr-2" data-toggle="modal" data-target="#loginModal"
+        style=" background-color:#fefefe; color: rgb(1, 124, 161);">
+        Login
+      </button>
 
-<button type="button" class="btn mr-2" style=" background-color:#fefefe; color: rgb(1, 124, 161);" data-toggle="modal" data-target="#signupModal">
-SignUp
-</button>
-</div>
-
-
- {% endif %}
-  </div>
-</nav>
-
-
-{% for message in messages  %}
-<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-      <strong>Message : </strong> {{ message }}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times</span>
+      <button type="button" class="btn mr-2" style=" background-color:#fefefe; color: rgb(1, 124, 161);"
+        data-toggle="modal" data-target="#signupModal">
+        SignUp
       </button>
     </div>
-{% endfor %}
+
+
+    {% endif %}
+    </div>
+  </nav>
+
+
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+    <strong>Message : </strong> {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times</span>
+    </button>
+  </div>
+  {% endfor %}
 
 
 
 
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background: black">
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background: black">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-              <a class="nav-link nav-item-all" href="/">All <span class="sr-only">(current)</span></a>
-          </li>
-            <li class="nav-item ">
-                <a class="nav-link nav-item-home" href="/home">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link nav-item-about" href="/aboutus">About Us <span class="sr-only">(current)</span></a>
-            </li>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link nav-item-all" href="/">All <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item ">
+          <a class="nav-link nav-item-home" href="/home">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav-item-about" href="/aboutus">About Us <span class="sr-only">(current)</span></a>
+        </li>
 
-            <li class="nav-item">
-                <a class="nav-link nav-item-complain" href="/faculty/complainform">Complain <span class="sr-only">(current)</span></a>
-            </li>
+        <li class="nav-item">
+          <a class="nav-link nav-item-complain" href="/faculty/complainform">Complain <span
+              class="sr-only">(current)</span></a>
+        </li>
 
-            <li class="nav-item">
-                <a class="nav-link nav-item-contact" href="/contact">Contact Us <span class="sr-only">(current)</span></a>
-            </li>
-        </ul>
+        <li class="nav-item">
+          <a class="nav-link nav-item-contact" href="/contact">Contact Us <span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
 
 
     </div>
-</nav>
-
-<!-- SignUp Modal -->
-<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModal" aria-hidden="true" >
-  <div class="modal-dialog">
-    <div class="modal-content" style="background-color: white; color: black;">
-      <div class="modal-header">
-        <h2 class="modal-title" id="signupModalTitle" style="margin-left: 24%; font-weight: 800; color: rgb(0, 0, 90);">Create Account</h2>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+  </nav>
+  {% block body %} {% endblock %}
+  <!-- Footer -->
+  <footer class="page-footer font-small pt-4" style="background-color: #05124d; color: aliceblue;">
+    <div class="container text-center text-md-left">
+      <div class="row text-center text-md-left mt-3 pb-3">
+        <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+          <h6 class="text-uppercase mb-4 font-weight-bold">Praaki</h6>
+          <p> The internet has revolutionised the way we do our shopping. The businessman regards the internet as a
+            modern effective tool for business transactions. Online shopping is the act of purchasing products or
+            services over the internet..</p>
+        </div>
+        <hr class="w-100 clearfix d-md-none" style=" border-top: 1px solid #f8f9fa;">
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+          <h6 class="text-uppercase mb-4 font-weight-bold">Products</h6>
+          <p>
+            <a href="#!">Gaming Mouse</a>
+          </p>
+          <p>
+            <a href="#!">Expensive Wrist Watches</a>
+          </p>
+          <p>
+            <a href="#!">Laptop</a>
+          </p>
+          <p>
+            <a href="#!">Shoes</a>
+          </p>
+        </div>
+        <hr class="w-100 clearfix d-md-none" style=" border-top: 1px solid #f8f9fa;">
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+          <h6 class="text-uppercase mb-4 font-weight-bold">Useful links</h6>
+          <p>
+            <a href="/shop/">Home</a>
+          </p>
+          <p>
+            <a href="/shop/checkout">Your Account</a>
+          </p>
+          <p>
+            <a href="/shop/about">About Us</a>
+          </p>
+          <p>
+            <a href="/shop/contact">Help</a>
+          </p>
+        </div>
+        <hr class="w-100 clearfix d-md-none" style=" border-top: 1px solid #f8f9fa;">
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+          <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
+          <p>
+            <i class="fas fa-home mr-3"></i> New York, NY 10012, US
+          </p>
+          <p>
+            <i class="fas fa-envelope mr-3"></i> mycart2403@gmail.com
+          </p>
+          <p>
+            <i class="fas fa-phone mr-3"></i> + 01 234 567 88
+          </p>
+          <p>
+            <i class="fas fa-print mr-3"></i> + 01 234 567 89
+          </p>
+        </div>
       </div>
-      <div class="modal-body">
-        <form action= "/signup" method='post'>
-  <div class="form-group">
-    <label for="username">Username</label>
-    <input type="text" class="form-control" id="username" name="username" placeholder="Choose a unique username">
-  </div>
-  <div class="form-group">
-    <label for="fname">First Name</label>
-    <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter Your First Name">
-  </div>
-  <div class="form-group">
-    <label for="lname">Last Name</label>
-    <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter Your Last Name">
-  </div>
-  <div class="form-group">
-    <label for="email">Email address</label>
-    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com">
-  </div>
-  <div class="form-group">
-    <label for="pass1">Choose a password</label>
-    <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Choose Your Password">
-  </div>
-  <div class="form-group">
-    <label for="pass2">Confirm Password</label>
-    <input type="password" class="form-control" id="pass2" name="pass2" placeholder="Enter your password again">
-  </div>
+      <hr style=" border-top: 1px solid #f8f9fa;">
+      <div class="row d-flex align-items-center">
 
-
-        {% csrf_token %}
-        <button type="submit" class="btn" style="background:green; color:white; width: 100%; height: 10%; font-size:22px">Submit</button>
-<br>
-</form>
+        <!-- Grid column -->
+        <div class="col-md-7 col-lg-8">
+          <p class="text-center text-md-left">© 2020 Copyright:
+            <a href="#">
+              <strong> mycart.com</strong>
+            </a>
+          </p>
+        </div>
+        <div class="col-md-5 col-lg-4 ml-lg-0">
+          <div class="row">
+            <div class="col-md-12 py-5">
+              <div class="mb-5 flex-center">
+                <a href="https://twitter.com">
+                  <i><img
+                      src="https://www.freepnglogos.com/uploads/twitter-logo-png/twitter-logo-vector-png-clipart-1.png"
+                      style="width: 12%; margin-top: 1%;"> </i>
+                </a>
+                <a href="https://instagram.com">
+                  <i> <img src="http://assets.stickpng.com/images/580b57fcd9996e24bc43c521.png"
+                      style="width: 12%; margin-top: 1%; margin-left: 3%;"></i>
+                </a>
+                <a href="https://github.com">
+                  <i> <img
+                      src="https://user-images.githubusercontent.com/6385983/34427109-5772d042-ec0c-11e7-896d-7e9096b92856.png"
+                      style="width: 12%; margin-top: 1%; margin-left: 3%; border-radius: 8px; border-top:  1px;"></i>
+                </a>
+                <a href="https://youtube.com">
+                  <i><img src="https://www.freeiconspng.com/thumbs/youtube-logo-png/youtube-logo-png-picture-13.png"
+                      style="width: 16%; margin-top: 1%; margin-left: 2%"> </i>
+                </a>
+                <a href="https://facebook.com">
+                  <i><img
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg-JpfC4gKgHEHQeUuv4LrEpy5In1LnWkwgwMTxE_SIGHeG4EaPw4juf0w6nn5SDQj5mw&usqp=CAU"
+                      style="width: 12%; margin-top: 1%; margin-left: 2%; border-radius: 8px;"> </i>
+                </a>
+                <a href="https://google.com">
+                  <i><img
+                      src="https://ipullrank.com/wp-content/uploads/2020/07/png-transparent-google-logo-g-suite-google-guava-google-plus-company-text-logo.png"
+                      style="width: 12%; margin-top: 1%; margin-left: 2%; border-radius: 50%"> </i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="modal-footer">
-      </div>
-
     </div>
-  </div>
-</div>
+  </footer>
 
-      {% block body %}  {% endblock %}
 
-<!-- Login Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <br><br>
-    <div class="modal-content" style="background-color: white; color: black;">
-      <div class="modal-header">
-        <h2 class="modal-title" id="loginModalTitle" style="margin-left: 28%; font-weight: 800; color: rgb(0, 0, 90);"> Login Here</h2>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <form action="/login" method="POST">
+  <!-- SignUp Modal -->
+  <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" style="background-color: white; color: black;">
+        <div class="modal-header">
+          <h2 class="modal-title" id="signupModalTitle"
+            style="margin-left: 24%; font-weight: 800; color: rgb(0, 0, 90);">Create Account</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/signup" method='post'>
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" class="form-control" id="username" name="username"
+                placeholder="Choose a unique username">
+            </div>
+            <div class="form-group">
+              <label for="fname">First Name</label>
+              <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter Your First Name">
+            </div>
+            <div class="form-group">
+              <label for="lname">Last Name</label>
+              <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter Your Last Name">
+            </div>
+            <div class="form-group">
+              <label for="email">Email address</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com">
+            </div>
+            <div class="form-group">
+              <label for="pass1">Choose a password</label>
+              <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Choose Your Password">
+            </div>
+            <div class="form-group">
+              <label for="pass2">Confirm Password</label>
+              <input type="password" class="form-control" id="pass2" name="pass2"
+                placeholder="Enter your password again">
+            </div>
+
+
             {% csrf_token %}
-  <div class="form-group">
-    <label for="username">Username</label>
-    <input type="text" class="form-control" id="loginusername" name="loginusername" placeholder="Choose a unique username">
-  </div>
+            <button type="submit" class="btn"
+              style="background:green; color:white; width: 100%; height: 10%; font-size:22px">Submit</button>
+            <br>
+          </form>
+        </div>
+        <div class="modal-footer">
+        </div>
 
-  <div class="form-group">
-    <label for="pass">Enter your password </label>
-    <input type="password" class="form-control" id="loginpassword" name="loginpassword" placeholder="Enter your password ">
-  </div>
-  <button type="submit" class="btn" style="background:green; color:white; width: 100%; height: 10%; font-size:22px">Submit</button>
-<br><br>
-<h5 style="text-align: center">Or login with social account</h5>
-
-{% csrf_token %}<br>
-
-<button class="btn" style="margin-bottom: 20px; text-align: center; width: 220px; height:36px; border:none; border-radius:2px; font-size: 15px; transition:0.2s; color:white;background-color:red"><ion-icon name="logo-google" style="font-size:20px"></ion-icon>&nbsp<a href="{% provider_login_url 'google' %}" style=" color:white">Login with Google</a></button>
-</form>
-      </div>
-       <div class="modal-footer">
       </div>
     </div>
+  </div>
+
+
+  <!-- Login Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
+    <di class="modal-dialog">
+      <br><br>
+      <div class="modal-content" style="background-color: white; color: black;">
+        <div class="modal-header">
+          <h2 class="modal-title" id="loginModalTitle"
+            style="margin-left: 28%; font-weight: 800; color: rgb(0, 0, 90);"> Login Here</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/login" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" class="form-control" id="loginusername" name="loginusername"
+                placeholder="Choose a unique username">
+            </div>
+
+            <div class="form-group">
+              <label for="pass">Enter your password </label>
+              <input type="password" class="form-control" id="loginpassword" name="loginpassword"
+                placeholder="Enter your password ">
+            </div>
+            <button type="submit" class="btn"
+              style="background:green; color:white; width: 100%; height: 10%; font-size:22px">Submit</button>
+            <br><br>
+            <h5 style="text-align: center">Or login with social account</h5>
+
+            {% csrf_token %}<br>
+
+            <button class="btn"
+              style="margin-bottom: 20px; text-align: center; width: 220px; height:36px; border:none; border-radius:2px; font-size: 15px; transition:0.2s; color:white;background-color:red"><ion-icon
+                name="logo-google" style="font-size:20px"></ion-icon>&nbsp<a href="{% provider_login_url 'google' %}"
+                style=" color:white">Login with Google</a></button>
+          </form>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </di  v>
+  </div>
 
 
 
 
 
 
-    
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.js"
-  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-  crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-    {% block js %} {% endblock %}
-  </body>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  {% block js %} {% endblock %}
+</body>
+
 </html>
