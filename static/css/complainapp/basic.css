@@ -1,0 +1,9 @@
+.body-content{
+    background-color: #fff;
+    padding: 20px;
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    margin-bottom: 20px;
+}

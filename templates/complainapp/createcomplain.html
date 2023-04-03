@@ -1,0 +1,43 @@
+{% extends 'complainapp/basic.html' %}
+
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static '/css/complainapp/index.css' %}">
+{% endblock style %}
+{% block body %}
+{% if user.is_authenticated %}
+    {% comment %} create a new complain {% endcomment %}
+    <form class="container-sm p-5" action="{% url 'createComplain' %}" method="post"> {% csrf_token %}
+        {{complainform.as_p}}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+{% endif %}
+{% endblock body %}
+
+{% block script %}
+<script>
+    // autoResize container for textarea
+    $(document).ready(function () {
+        // smooth transitions for textarea
+        $('textarea').each(function () {
+            this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+        }).on('input', function () {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    }); 
+    
+</script>
+{% if designation_holder %}
+<script>
+    $("document").ready(function () {
+        $("#nav-options").append('<li class="nav-item"><a class="nav-link" href="{% url 'respondcomplain' %}">Resolve Complains</a></li>');
+        $('.complain-class').click(function () {
+            // Toggle visibility of .complain-desc element
+            $(this).find('.complain-desc').toggle();
+        });
+    });
+</script>
+{% endif %}
+{% endblock script %}
