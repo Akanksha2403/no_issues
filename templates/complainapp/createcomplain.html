@@ -32,10 +32,12 @@
 {% if designation_holder %}
 <script>
     $("document").ready(function () {
-        $("#nav-options").append('<li class="nav-item"><a class="nav-link" href="{% url 'respondcomplain' %}">Resolve Complains</a></li>');
-        $('.complain-class').click(function () {
-            // Toggle visibility of .complain-desc element
-            $(this).find('.complain-desc').toggle();
+        $("#nav-options").append('<li class="nav-item"><a class="nav-link" href="{% url 'respondComplain' %}">Resolve Complains</a></li>');
+        $('.complain-class').click(function (e) {
+            // Toggle visibility of .complain-desc element, unless the clicked element is a textarea
+            if (!$(e.target).is('textarea')) {
+                $(this).find('.complain-desc').toggle();
+            }
         });
     });
 </script>

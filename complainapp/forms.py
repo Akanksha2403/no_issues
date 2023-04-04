@@ -23,23 +23,6 @@ class LoginForm(forms.Form):
         attrs={'placeholder': 'Password', 'label': 'Password', 'class': 'form-control'}))
 
 
-"""
-class Complain(models.Model):
-    id = models.AutoField
-    heading = models.CharField(max_length=300)
-    description = models.TextField()
-    registered_by = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    registered_to = models.ForeignKey('Designation', on_delete=models.CASCADE)
-    registered_date = models.DateField(default=now, db_index=True)
-    response_date = models.DateField(
-        default=datetime.utcnow() + timedelta(days=1))
-    completed = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.heading + " to " + self.registered_to.name
-
-"""
-
 class ComplainForm(forms.ModelForm):
     class Meta:
         model = Complain
@@ -55,7 +38,7 @@ class ComplainForm(forms.ModelForm):
 
     def clean_response_date(self):
         response_date = self.cleaned_data['response_date']
-        if response_date <= forms.DateField().clean(now().date() + timedelta(days=1)):
+        if response_date < forms.DateField().clean(now().date() + timedelta(days=1)):
             raise forms.ValidationError(
                 "Response date must be at least one day after today.")
         return response_date

@@ -7,44 +7,46 @@
 {% block body %}
 {% if user.is_authenticated %}
 <div class="content-enclosure">
-    <h1 style="text-align:center;">Your complains </h1>
+    <h1 style="text-align:center;">Complains by you </h1>
     <div class="complains1" style="min-height:200px">
         <h2 class="bg-success text-white rounded-top" style="text-align:center; margin:0;padding:5px;">Complains
             answered</h2>
         <div class="list-group complain-list" style="border-radius:0px 0px 5px 5px">
+            {% for complain in answered_complains %}
             <a href="#" class="list-group-item list-group-item-action complain-class" aria-current="true">
-                <h6 class="complain-subject m-2">Complain regarding marks in numerical methods by Prabhav Agrawal
-                    (LIT2020036)</h6>
-                <div class="complain-desc">
-                    <p>Dear Sir, My marks in numerical methods are not correct.
-                        I have scored 90 marks in the exam but the marks shown in the portal is 80. Please look into the
-                        matter.</p>
-                    <form action="/respond_complain" method="post"> {% csrf_token %}
-                        <textarea name="response_field" id="response_field"></textarea>
-                        <button type="submit" class="btn btn-primary">Respond</button>
-                    </form>
+                <h6 class="complain-subject m-2">{{ complain.heading }}
+                    <small style="font-size: 12px">-- to Director</small>
+                </h6>
+                <div class="complain-desc m-2">
+                    <p>{{ complain.description }}</p>
+                    <p>Response date: {{ complain.response_date }}</p>
                 </div>
-
             </a>
+            {% empty %}
+            <p>No complains have been answered yet.</p>
+            {% endfor %}
+        </div>
+    </div>
 
+    <div class="complains2" style="min-height:200px">
+        <h2 class="bg-danger text-white rounded-top" style="text-align:center; margin:0;padding:5px;">Complains not
+            answered</h2>
+        <div class="list-group complain-list" style="border-radius:0px 0px 5px 5px">
+            {% for complain in unanswered_complains %}
+            <a href="#" class="list-group-item list-group-item-action complain-class" aria-current="true">
+                <h6 class="complain-subject m-2">{{ complain.heading }}
+                    <small style="font-size: 12px">-- to Director</small>
+                </h6>
+                <div class="complain-desc m-2">
+                    <p>{{ complain.description }}</p>
+                    <p>Response date: {{ complain.response_date }}</p>
+                </div>
+            </a>
+            {% empty %}
+            <p>All complains have been answered.</p>
+            {% endfor %}
         </div>
     </div>
 </div>
-
-
 {% endif %}
 {% endblock body %}
-
-{% block script %}
-{% if designation_holder %}
-<script>
-    $("document").ready(function () {
-        $("#nav-options").append('<li class="nav-item"><a class="nav-link" href="{% url 'respondComplain' %}">Resolve Complains</a></li>');
-        $('.complain-class').click(function () {
-            // Toggle visibility of .complain-desc element
-            $(this).find('.complain-desc').toggle();
-        });
-    });
-</script>
-{% endif %}
-{% endblock script %}

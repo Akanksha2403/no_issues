@@ -3,18 +3,29 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import *
 from .models import *
+from django.utils import timezone
+from django.db.models import Q, F
 from django.contrib.auth.decorators import login_required
 
 
-today_date = None
+def escalate_complains():
+    current_date = timezone.now().date()
+    Complain.objects.filter(
+        Q(completed=False) & Q(response_date__lt=current_date) & Q(
+            registered_to__parent__isnull=False)
+    ).update(registered_to=F('registered_to__parent'))
 
-def check_designation(profile): 
-    return profile.designation_holder.all().count() != 0
+
+def check_designation(profile):
+    return profile.designation_holder.exists()
 
 
 def index(request):
     if (request.user.is_authenticated):
-        return render(request, "complainapp/index.html", {'designation_holder': True})
+        profile = Profile.objects.get(user=request.user)
+        answered_complains = Complain.objects.filter(registered_by=profile, completed=True)
+        unanswered_complains = Complain.objects.filter(registered_by=profile, completed=False)
+        return render(request, 'complainapp/index.html', {'answered_complains': answered_complains, 'unanswered_complains': unanswered_complains})
     else:
         signupform = SignupForm()
         loginform = LoginForm()
@@ -84,17 +95,30 @@ def handleLogout(request):
     messages.success(request, "Successfully Logged Out")
     return redirect('/')
 
+
 @login_required(login_url='/')
 def respondComplain(request):
-    if not check_designation(Profile.objects.get(user=request.user)): 
+    if (request.method == "POST"):
+        complain_id = request.POST.get('complain_id')
+        complain = Complain.objects.get(id=complain_id)
+        complain.response = request.POST.get('response')
+        complain.response_date = now()
+        complain.completed = True
+        complain.save()
+        messages.success(request, "Complain Responded Successfully")
+        return redirect('respondComplain')
+
+    if not check_designation(Profile.objects.get(user=request.user)):
         messages.error(request, "You do not hold any designation")
         return redirect('/')
     myprofile = Profile.objects.get(user=request.user)
     designation_set = myprofile.designation_holder.all()
     complains_list = dict()
     for designation in designation_set:
-        complains_list[designation] = Complain.objects.filter(registered_to=designation)
+        complains_list[designation] = Complain.objects.filter(
+            registered_to=designation, completed=False)
     return render(request, "complainapp/respondcomplain.html", {'complains_list': complains_list, 'designation_holder': True})
+
 
 @login_required(login_url='/')
 def createComplain(request):
@@ -102,18 +126,18 @@ def createComplain(request):
     all_designations = Designation.objects.all()
     if request.method == 'POST':
         form = ComplainForm(request.POST)
-        try: 
-            if form.is_valid():
-                complain = form.save(commit=False)
-                complain.registered_by = request.user.profile
-                complain.registered_date = now()
-                complain.completed = False
-                complain.save()
+        if form.is_valid():
+            complain = form.save(commit=False)
+            complain.registered_by = Profile.objects.get(user=request.user)
+            complain.registered_date = now()
+            complain.completed = False
+            complain.save()
             messages.success(request, "Complain Registered Successfully")
-            return redirect('createcomplain')
-        except Exception as e:
-            messages.error(request, e)
-            return redirect('createcomplain')
+        else:
+            messages.error(
+                request, "Some Error Occured, Please try again or contact us")
+        return redirect('createComplain')
+
     else:
         complainform = ComplainForm()
-    return render(request, "complainapp/createcomplain.html", {'complainform': complainform, 'all_designations': all_designations})
+        return render(request, "complainapp/createcomplain.html", {'complainform': complainform, 'all_designations': all_designations})

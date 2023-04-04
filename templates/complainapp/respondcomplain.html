@@ -20,9 +20,10 @@
                     <h6 class="complain-subject m-2">{{ complain.heading }}</h6>
                     <div class="complain-desc">
                         <p>{{ complain.description }}</p>
-                        <form action="/respond_complain" method="post">
+                        <form action="{% url 'respondComplain' %}" method="post">
                             {% csrf_token %}
-                            <textarea name="response_field" id="response_field"></textarea>
+                            <input type="hidden" name="complain_id" value="{{ complain.id }}">
+                            <textarea name="response" id="response_field"></textarea>
                             <button type="submit" class="btn btn-primary">Respond</button>
                         </form>
                     </div>
@@ -38,19 +39,3 @@
 
 {% endif %}
 {% endblock body %}
-
-{% block script %}
-{% if designation_holder %}
-<script>
-    $("document").ready(function () {
-        $("#nav-options").append('<li class="nav-item"><a class="nav-link" href="{% url 'respondComplain' %}">Resolve Complains</a></li>');
-        $('.complain-class').click(function (e) {
-            // Toggle visibility of .complain-desc element, unless the clicked element is a textarea
-            if (!$(e.target).is('textarea')) {
-                $(this).find('.complain-desc').toggle();
-            }
-        });
-    });
-</script>
-{% endif %}
-{% endblock script %}

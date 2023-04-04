@@ -24,13 +24,9 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="nav-options">
           {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
+          <li class="nav-item"> <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a></li>
           <li> <a class="nav-link" href="{% url 'createComplain' %}">Create complain</a> </li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'respondComplain' %}">Resolve Complains</a></li>
           {% endif %}
         </ul>
         <div class="d-flex">
@@ -98,6 +94,14 @@
   </script>
   <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"
     integrity="sha256-a2yjHM4jnF9f54xUQakjZGaqYs/V1CYvWpoqZzC2/Bw=" crossorigin="anonymous"></script>
+  <script>
+    $('.complain-class').click(function (e) {
+      // Toggle visibility of .complain-desc element, unless the clicked element is a textarea
+      if (!$(e.target).is('textarea')) {
+        $(this).find('.complain-desc').toggle();
+      }
+    });
+  </script>
   {% block script %}{% endblock script %}
 </body>
 
