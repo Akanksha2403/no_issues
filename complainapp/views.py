@@ -101,7 +101,8 @@ def respondComplain(request):
     if (request.method == "POST"):
         complain_id = request.POST.get('complain_id')
         complain = Complain.objects.get(id=complain_id)
-        complain.response = request.POST.get('response')
+        response = request.POST.get('response')
+        complain.description = complain.description + f"\nresponse by {complain.registered_to.name}: {response}"
         complain.response_date = now()
         complain.completed = True
         complain.save()

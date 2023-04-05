@@ -10,10 +10,10 @@
     {% comment %} complain-list will be in dictionary with key = designation and value = complains {% endcomment %}
     {% for designation, complains in complains_list.items %}
     <div class="designation-wrap-complains">
-        <h1 style="text-align:center;">{{ designation.name }}</h1>
+        {% comment %} <h1 style="text-align:center;">{{ designation.name }}</h1> {% endcomment %}
         <div class="complains1" style="min-height:200px">
-            <h2 class="bg-success text-white rounded-top" style="text-align:center; margin:0;padding:5px;">Complains
-                answered</h2>
+            <h2 class="bg-success text-white rounded-top" style="text-align:center; margin:0;padding:5px;">Resolve
+                Complains as {{designation.name}}</h2>
             <div class="list-group complain-list" style="border-radius:0px 0px 5px 5px">
                 {% for complain in complains %}
                 <a href="#" class="list-group-item list-group-item-action complain-class" aria-current="true">
@@ -32,7 +32,7 @@
             </div>
         </div>
     </div>
-{% endfor %}
+    {% endfor %}
 
 </div>
 
