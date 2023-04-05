@@ -14,5 +14,7 @@ urlpatterns = [
     # path('form', views.form, name='form'),
     # path("contact", views.contact, name="contact"),
     # path('aboutus', views.about, name='aboutus'),
-
+    path('allcomplain', views.allcomplain, name = "allcomplain"),
+    path('postlike', views.postlike, name='postlike'),
+    # path('read/<int:id>', views.read, name='read'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
