@@ -35,7 +35,7 @@
             {% for complain in unanswered_complains %}
             <a href="#" class="list-group-item list-group-item-action complain-class" aria-current="true">
                 <h6 class="complain-subject m-2">{{ complain.heading }}
-                    <small style="font-size: 12px">-- to Director</small>
+                    <small style="font-size: 12px">{{complain.registered_to}}</small>
                 </h6>
                 <div class="complain-desc m-2">
                     <p>{{ complain.description }}</p>
