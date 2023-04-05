@@ -129,6 +129,7 @@ def createComplain(request):
         form = ComplainForm(request.POST)
         if form.is_valid():
             complain = form.save(commit=False)
+            # complain.registered_to = 
             complain.registered_by = Profile.objects.get(user=request.user)
             complain.registered_date = now()
             complain.completed = False
