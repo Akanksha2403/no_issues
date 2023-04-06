@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import *
@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.db.models import Q, F
 from django.contrib.auth.decorators import login_required
 
+from django.urls import reverse
 
 def escalate_complains():
     current_date = timezone.now().date()
@@ -119,6 +120,33 @@ def respondComplain(request):
         complains_list[designation] = Complain.objects.filter(
             registered_to=designation, completed=False)
     return render(request, "complainapp/respondcomplain.html", {'complains_list': complains_list, 'designation_holder': True})
+
+def allcomplain(request):
+    allcomplain = Complain.objects.all()
+   
+    return render(request,'complainapp/allcomplains.html',{'allcomplain':allcomplain})
+
+def postlike(request):
+    user = request.user
+    if(request.method == 'POST'):
+        post_id = request.POST.get('cid')
+        post_obj = Complain.objects.get(id=post_id)
+
+        if(user in post_obj.likes.all()):
+            post_obj.likes.remove(user)
+        else:
+            post_obj.likes.add(user)
+        
+        like, created = Like.objects.get_or_create(user=user, post_id = post_id)
+
+        if not created:
+            if(like.value == 'like'):
+                like.value = 'unlike'
+            else:
+                like.value = 'like'
+        like.save()
+
+    return redirect('allcomplain')
 
 
 @login_required(login_url='/')

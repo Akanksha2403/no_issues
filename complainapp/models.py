@@ -32,6 +32,23 @@ class Complain(models.Model):
     registered_date = models.DateField(default=now, db_index=True)
     response_date = models.DateField(default=datetime.utcnow() + timedelta(days=1))
     completed = models.BooleanField(default=False)
+    likes = models.ManyToManyField(User,related_name="postlike", blank=True)
 
     def __str__(self):
         return self.heading + " to " + self.registered_to.name
+    
+    @property
+    def total_like(self):
+        return self.likes.all().count()
+
+LIKE_CHOICES = (
+    ('like','like'),
+    ('unlike','unlike'),
+)
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Complain, on_delete=models.CASCADE)
+    value = models.CharField(choices = LIKE_CHOICES, default='Like', max_length=10)
+    
+    def __str__(self) -> str:
+        return str(self.post)

@@ -1,0 +1,45 @@
+{% extends 'complainapp/basic.html' %}
+{% load static %}
+{% block css %}
+<style>
+
+</style>
+{% endblock css %}
+{% block body %}
+<hr style="background-color:white;">
+<h1>Welcome to complain portal</h1>
+
+<div class="row fir-part" style="display: flex;">
+    <div class="complains1" style="min-height:200px">
+        {% for complain in allcomplain %}
+        <a href="#" class="list-group-item list-group-item-action complain-class" aria-current="true">
+            <h6 class="complain-subject m-2">{{ complain.heading }}
+                <small style="font-size: 12px">{{complain.registered_to}}</small>
+            </h6>
+            <div class="complain-desc m-2">
+                <p>{{ complain.description }}</p>
+                <p>Response date: {{ complain.response_date }}</p>            
+        </a>
+        <form action="{% url 'postlike' %}" method="POST">
+            {% csrf_token %}
+            <input type ='hidden' name='cid' value="{{complain.id}}">
+            {% if user not in complain.likes.all %}
+            <button type ="submit" class="like"><ion-icon name='thumbs-up'></ion-icon></button>
+            {%else%}
+            <button type ="submit" class="dislike"><ion-icon name='thumbs-up-outline'></ion-icon></button>
+            {%endif%}
+
+        </form>
+        <strong>{{complain.likes.all.count}}</strong>
+        <!-- comentend -->
+
+    </div>
+
+        <hr>
+        {% endfor %}
+    </div>
+
+
+</div>
+
+{% endblock body %}
