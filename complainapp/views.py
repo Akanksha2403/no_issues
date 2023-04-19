@@ -9,12 +9,31 @@ from django.contrib.auth.decorators import login_required
 
 from django.urls import reverse
 
-def escalate_complains():
+def escalate_complains(func):
     current_date = timezone.now().date()
-    Complain.objects.filter(
-        Q(completed=False) & Q(response_date__lt=current_date) & Q(
-            registered_to__parent__isnull=False)
-    ).update(registered_to=F('registered_to__parent'))
+
+    # Get all active complaints that are due for escalation and have a non-null parent designation
+    complaints = Complain.objects.filter(
+        completed=False,
+        response_date__lt=current_date,
+        registered_to__parent__isnull=False
+    )
+
+    for complaint in complaints:
+        # Traverse the hierarchy by following the parent relationships
+        parent_designation = complaint.registered_to.parent
+
+        # Keep going up the tree until we find a parent with a designation holder
+        while parent_designation is not None and parent_designation.designation_holder is None:
+            parent_designation = parent_designation.parent
+
+        # If we found a parent with a designation holder, update the registered_to field
+        if parent_designation is not None:
+            complaint.registered_to = parent_designation
+            complaint.description += f"\n--escalated due to timeout by the {parent_designation.name} at {timezone.now()}"
+            complaint.save()
+    
+    
 
 
 def check_designation(profile):

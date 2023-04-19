@@ -18,7 +18,7 @@
                     <small style="font-size: 12px">{{complain.registered_to}}</small>
                 </h6>
                 <div class="complain-desc m-2">
-                    <p>{{ complain.description }}</p>
+                    <p>{{ complain.description|linebreaksbr }}</p>
                     <p>Response date: {{ complain.response_date }}</p>
                 </div>
             </a>
@@ -38,7 +38,7 @@
                     <small style="font-size: 12px">{{complain.registered_to}}</small>
                 </h6>
                 <div class="complain-desc m-2">
-                    <p>{{ complain.description }}</p>
+                    <p>{{ complain.description|linebreaksbr }}</p>
                     <p>Response date: {{ complain.response_date }}</p>
                 </div>
             </a>
