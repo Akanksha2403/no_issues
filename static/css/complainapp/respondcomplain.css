@@ -1,0 +1,17 @@
+.complain-desc {
+    display: none;
+    padding: 10px 15px;
+}
+.complain-class:hover{
+    transition: all 0.2s ease;
+}
+.list-group-item {
+    padding: 0!important;
+}
+
+.complain-subject{
+    padding: 10px 15px;
+    color: white;
+    margin: 0px; 
+    background-color: rgb(38, 218, 134)
+}

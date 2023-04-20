@@ -16,19 +16,7 @@
 {% endblock body %}
 
 {% block script %}
-<script>
-    // autoResize container for textarea
-    $(document).ready(function () {
-        // smooth transitions for textarea
-        $('textarea').each(function () {
-            this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
-        }).on('input', function () {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-        });
-    }); 
-    
-</script>
+
 {% if designation_holder %}
 <script>
     $("document").ready(function () {

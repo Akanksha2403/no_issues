@@ -27,7 +27,6 @@ class ComplainForm(forms.ModelForm):
     class Meta:
         model = Complain
         fields = ('heading', 'description', 'registered_to', 'response_date')
-
     response_date = forms.DateField(
         label='Response Date',
         help_text='Select a date at least one day after today',
@@ -46,5 +45,5 @@ class ComplainForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['heading'].widget.attrs.update({'class': 'form-control'})
-        self.fields['description'].widget.attrs.update({'class': 'form-control', 'rows': 5})
+        self.fields['description'].widget.attrs.update({'class': 'form-control autoresize-textarea', 'rows': 5})
         self.fields['registered_to'].widget.attrs.update({'class': 'form-control'})

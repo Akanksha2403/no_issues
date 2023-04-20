@@ -2,7 +2,7 @@
 
 {% load static %}
 {% block style %}
-<link rel="stylesheet" href="{% static '/css/complainapp/index.css' %}">
+<link rel="stylesheet" href="{% static '/css/complainapp/respondcomplain.css' %}">
 {% endblock style %}
 {% block body %}
 {% if user.is_authenticated %}
@@ -10,21 +10,20 @@
     {% comment %} complain-list will be in dictionary with key = designation and value = complains {% endcomment %}
     {% for designation, complains in complains_list.items %}
     <div class="designation-wrap-complains">
-        {% comment %} <h1 style="text-align:center;">{{ designation.name }}</h1> {% endcomment %}
         <div class="complains1" style="min-height:200px">
             <h2 class="bg-success text-white rounded-top" style="text-align:center; margin:0;padding:5px;">Resolve
                 Complains as {{designation.name}}</h2>
             <div class="list-group complain-list" style="border-radius:0px 0px 5px 5px">
                 {% for complain in complains %}
                 <a href="#" class="list-group-item list-group-item-action complain-class" aria-current="true">
-                    <h6 class="complain-subject m-2">{{ complain.heading }}</h6>
+                    <h6 class="complain-subject">{{ complain.heading }}</h6>
                     <div class="complain-desc">
-                        <p>{{ complain.description }}</p>
+                        <p>{{ complain.description|linebreaksbr }}</p>
                         <form action="{% url 'respondComplain' %}" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="complain_id" value="{{ complain.id }}">
-                            <textarea name="response" id="response_field"></textarea>
-                            <button type="submit" class="btn btn-primary">Respond</button>
+                            <textarea name="response" class="form-control autoresize-textarea" id="response_field" style="height:100px"></textarea>
+                            <button type="submit" class="btn btn-primary my-2">Respond</button>
                         </form>
                     </div>
                 </a>
