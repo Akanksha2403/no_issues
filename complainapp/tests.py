@@ -14,12 +14,12 @@ git push
 git branch other - create new branch
 git checkout other - switch to other branch
 // yahan pe apna fir koi bhi kaam kar sakte ho
+// bakchodi starts
 git add .
 git commit -m "changes ke bare me"
-git push
+// bakchodi ends
 git checkout master - switch to master branch
 git pull - get latest changes
 git merge other - merge other branch to master
 git push
-
 """

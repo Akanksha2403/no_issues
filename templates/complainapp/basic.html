@@ -86,22 +86,25 @@
     integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous">
   </script>
   <script>
-    var close = document.getElementsByClassName("btn-close");
-    // set timeout function to close the alert after 3 seconds
-    setTimeout(function () {
-      for (var i = 0; i < close.length; i++) {
-        close[i].click();
-      }
-    }, 3000);
+    // run when the page is loaded jquery
+    $(document).ready(function () {
+      // get all the close buttons
+      var close = document.getElementsByClassName("btn-close");
+      // set timeout function to close the alert after 3 seconds
+      setTimeout(function () {
+        for (var i = 0; i < close.length; i++) {
+          close[i].click();
+        }
+      }, 4000);
+    });
   </script>
   <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"
-    integrity="sha256-a2yjHM4jnF9f54xUQakjZGaqYs/V1CYvWpoqZzC2/Bw=" crossorigin="anonymous"></script>
+    integrity="sha256-a2yjHM4jnF9f54xUQakjZGaqYs/V1CYvWpoqZzC2/Bw=" crossorigin="anonymous">
+  </script>
+ 
   <script>
-    $('.complain-class').click(function (e) {
-      // Toggle visibility of .complain-desc element, unless the clicked element is a textarea
-      if (!$(e.target).is('textarea')) {
-        $(this).find('.complain-desc').toggle();
-      }
+    $('.complain-subject').click(function (e) {
+      $(this).parent().find('.complain-desc').toggle();
     });
     const txHeight = 136;
     const tx = document.getElementsByClassName("autoresize-textarea");
@@ -120,8 +123,8 @@
       this.style.height = (this.scrollHeight + 100) + "px";
     }
   </script>
-  {% block script %} <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js">
-  </script>
+  {% block script %} 
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>{% endblock script %}
 </body>
 
