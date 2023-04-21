@@ -1,45 +1,71 @@
 {% extends 'complainapp/basic.html' %}
 {% load static %}
-{% block css %}
+{% block style %}
 <style>
-
+    .btn-like{
+        border-radius: 15px;
+        padding-block: 3px;
+        padding-inline: 9px; 
+        border: 1px solid #0D6EFD; 
+        transition: all 0.2s ease;
+        line-height: initial; 
+        background-color: #0D6EFD; 
+        color: white; 
+        min-width: 70px; 
+        display:block;
+    }
+    .btn-like:hover{
+        cursor: pointer;
+        border: 1px solid whitesmoke;
+    }
+    .liking{
+        color: white;; 
+    }
+    .like-count{
+        margin-left:5px; 
+    }
+    .cwrapper{
+        display: flex;
+        align-items: center;
+    }
+    .complain-desc {
+        display: none;
+    }
+    .complain-subject:hover{
+        cursor: pointer;    
+    }
+    .list-group-item {
+        padding: 0!important;
+    }
 </style>
-{% endblock css %}
+{% endblock style %}
 {% block body %}
-<hr style="background-color:white;">
-<h1>Welcome to complain portal</h1>
-
-<div class="row fir-part" style="display: flex;">
+<div class="content-enclosure">
+    <h1>Welcome to complain portal</h1>
     <div class="complains1" style="min-height:200px">
-        {% for complain in allcomplain %}
-        <a href="#" class="list-group-item list-group-item-action complain-class" aria-current="true">
-            <h6 class="complain-subject m-2">{{ complain.heading }}
-                <small style="font-size: 12px">{{complain.registered_to}}</small>
-            </h6>
-            <div class="complain-desc m-2">
-                <p>{{ complain.description }}</p>
-                <p>Response date: {{ complain.response_date }}</p>            
-        </a>
-        <form action="{% url 'postlike' %}" method="POST">
-            {% csrf_token %}
-            <input type ='hidden' name='cid' value="{{complain.id}}">
-            {% if user not in complain.likes.all %}
-            <button type ="submit" class="like"><ion-icon name='thumbs-up'></ion-icon></button>
-            {%else%}
-            <button type ="submit" class="dislike"><ion-icon name='thumbs-up-outline'></ion-icon></button>
-            {%endif%}
-
-        </form>
-        <strong>{{complain.likes.all.count}}</strong>
-        <!-- comentend -->
-
+        <div class="list-group complain-list" style="border-radius:0px 0px 5px 5px">
+            {% for complain in allcomplain %}
+            <a class="list-group-item complain-class d-inline-flex" aria-current="true" style="display:inline-block;">
+                <h6 class="complain-subject m-2" style="margin-right:auto;">{{ complain.heading }}</h6>
+                <div class="complain-desc m-2">
+                    <p>{{ complain.description|linebreaksbr }}</p>
+                    <p>Response date: {{ complain.response_date }}</p>
+                    
+                </div>
+                <form action="{% url 'postlike' %}" method="POST" style="margin-left:auto;display:flex;"> {% csrf_token %}
+                    <div class="cwrapper">
+                        <input type ='hidden' name='cid' value="{{ complain.id }}">
+                        {% if user not in complain.likes.all %}
+                        <button type="submit" class="btn-like like me-2"><i class="far fa-thumbs-up liking"></i> <span class="like-count">{{ complain.likes.all.count }}</span> </button>
+                        {% else %}
+                        <button type="submit" class="btn-like unlike me-2"><i class="fas fa-thumbs-up liking"></i> <span class="like-count">{{ complain.likes.all.count }}</span> </button>
+                        {% endif %}
+                    </div>        
+                </form>
+            </a>
+            {% endfor %}
+        </div>
     </div>
-
-        <hr>
-        {% endfor %}
-    </div>
-
-
 </div>
 
 {% endblock body %}

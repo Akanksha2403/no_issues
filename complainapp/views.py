@@ -6,11 +6,10 @@ from .models import *
 from django.utils import timezone
 from django.db.models import Q, F
 from django.contrib.auth.decorators import login_required
-
 from django.urls import reverse
 
 def check_escalation():
-    current_date = timezone.now().date()
+    current_date = timezone.datetime.now()
 
     # Get all active complaints that are due for escalation and have a non-null parent designation
     complaints = Complain.objects.filter(
@@ -30,8 +29,8 @@ def check_escalation():
     
 
 
-def check_designation(profile):
-    return profile.designation_holder.exists()
+def check_designation(user):
+    return Profile.objects.get(user=user).designation_holder.exists()
 
 
 def index(request):
@@ -124,7 +123,7 @@ def respondComplain(request):
         messages.success(request, "Complain Responded Successfully")
         return redirect('respondComplain')
 
-    if not check_designation(Profile.objects.get(user=request.user)):
+    if not check_designation(request.user):
         messages.error(request, "You do not hold any designation")
         return redirect('/')
     myprofile = Profile.objects.get(user=request.user)
