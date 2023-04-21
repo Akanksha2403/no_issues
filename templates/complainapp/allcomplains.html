@@ -31,6 +31,9 @@
     .complain-desc {
         display: none;
     }
+    .complain-subject{
+        display:flex; 
+    }
     .complain-subject:hover{
         cursor: pointer;    
     }
@@ -46,7 +49,7 @@
         <div class="list-group complain-list" style="border-radius:0px 0px 5px 5px">
             {% for complain in allcomplain %}
             <a class="list-group-item complain-class d-inline-flex" aria-current="true" style="display:inline-block;">
-                <h6 class="complain-subject m-2" style="margin-right:auto;">{{ complain.heading }}</h6>
+                <h6 class="complain-subject my-auto ps-3">{{ complain.heading }}</h6>
                 <div class="complain-desc m-2">
                     <p>{{ complain.description|linebreaksbr }}</p>
                     <p>Response date: {{ complain.response_date }}</p>
@@ -56,9 +59,9 @@
                     <div class="cwrapper">
                         <input type ='hidden' name='cid' value="{{ complain.id }}">
                         {% if user not in complain.likes.all %}
-                        <button type="submit" class="btn-like like me-2"><i class="far fa-thumbs-up liking"></i> <span class="like-count">{{ complain.likes.all.count }}</span> </button>
+                        <button type="submit" class="btn-like like m-2"><i class="far fa-thumbs-up liking"></i> <span class="like-count">{{ complain.likes.all.count }}</span> </button>
                         {% else %}
-                        <button type="submit" class="btn-like unlike me-2"><i class="fas fa-thumbs-up liking"></i> <span class="like-count">{{ complain.likes.all.count }}</span> </button>
+                        <button type="submit" class="btn-like unlike m-2"><i class="fas fa-thumbs-up liking"></i> <span class="like-count">{{ complain.likes.all.count }}</span> </button>
                         {% endif %}
                     </div>        
                 </form>
