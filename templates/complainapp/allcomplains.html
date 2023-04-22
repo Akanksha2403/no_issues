@@ -53,7 +53,6 @@
                 <div class="complain-desc m-2">
                     <p>{{ complain.description|safe }}</p>
                     <p>Response date: {{ complain.response_date }}</p>
-                    
                 </div>
                 <form action="{% url 'postlike' %}" method="POST" style="margin-left:auto;display:flex;"> {% csrf_token %}
                     <div class="cwrapper">
