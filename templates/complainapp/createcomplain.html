@@ -3,6 +3,14 @@
 {% load static %}
 {% block style %}
 <link rel="stylesheet" href="{% static '/css/complainapp/index.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-lJfPZ+IaG6N1Z6JNtsjHseB/L2xNf+PuznYJ9AJW/71E/nCm6r+Uv0DkLW8+eow4J4yjquGvXLeM+d8HpsQGlQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+    #speech-btn {
+        border-radius: 100%;
+        border: none;
+        background-color: #f1f1f1;
+    }
+</style>
 {% endblock style %}
 {% block body %}
 {% if user.is_authenticated %}
@@ -16,8 +24,29 @@
 {% endblock body %}
 
 {% block script %}
-
+<script>
+    const descriptionField = document.getElementById("id_description");
+    const buttonHTML = '<button type="button" id="speech-btn"><i class="fa fa-microphone" aria-hidden="true"></i></button>';
+    descriptionField.insertAdjacentHTML('beforebegin', buttonHTML);
+</script>
+<script>
+    document.getElementById("speech-btn").addEventListener("click", () => {
+      const recognition = new webkitSpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      
+      recognition.addEventListener("result", (event) => {
+         const message= descriptionField.value;
+        const speechResult = event.results[0][0].transcript;
+        descriptionField.value = message+ " "+  speechResult;
+      });
+      
+      recognition.start();
+    });
+  </script>
 {% if designation_holder %}
+
 <script>
     $("document").ready(function () {
         $("#nav-options").append('<li class="nav-item"><a class="nav-link" href="{% url 'respondComplain' %}">Resolve Complains</a></li>');
@@ -29,5 +58,6 @@
         });
     });
 </script>
+
 {% endif %}
 {% endblock script %}
