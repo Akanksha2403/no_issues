@@ -7,9 +7,9 @@
 {% block body %}
 {% if user.is_authenticated %}
 <div class="content-enclosure">
-    <h1 style="text-align:center;">Complains by you </h1>
+    <h1 style="text-align:center;">Your Complains </h1>
     <div class="complains1" style="min-height:200px">
-        <h2 class="bg-success text-white rounded-top" style="text-align:center; margin:0;padding:5px;">Complains
+        <h2 class="bg-success text-white rounded-top" style="text-align:left; margin:0;padding:5px;">Complains
             answered</h2>
         <div class="list-group complain-list" style="border-radius:0px 0px 5px 5px">
             {% for complain in answered_complains %}
@@ -29,7 +29,7 @@
     </div>
 
     <div class="complains2" style="min-height:200px">
-        <h2 class="bg-danger text-white rounded-top" style="text-align:center; margin:0;padding:5px;">Complains not
+        <h2 class="bg-danger text-white rounded-top" style="text-align:left; margin:0;padding:5px;">Complains not
             answered</h2>
         <div class="list-group complain-list" style="border-radius:0px 0px 5px 5px">
             {% for complain in unanswered_complains %}
