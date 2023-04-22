@@ -3,6 +3,7 @@ from .models import *
 from django import forms
 from django.utils.timezone import now, timedelta
 
+
 class SignupForm(forms.Form):
     first_name = forms.CharField(max_length=100, required=True, label="First Name", widget=forms.TextInput(
         attrs={'placeholder': 'First Name', 'class': 'form-control'}))
@@ -27,13 +28,18 @@ class ComplainForm(forms.ModelForm):
     class Meta:
         model = Complain
         fields = ('heading', 'description', 'registered_to', 'response_date')
+
+    description = forms.CharField(
+        widget=forms.Textarea({'class': 'form-control tinymce', 'rows': 5}), 
+        required=False, label='Description'
+    )
     response_date = forms.DateField(
         label='Response Date',
         help_text='Select a date at least one day after today',
         widget=forms.SelectDateWidget(),
         initial=now().date() + timedelta(days=1)
     )
-
+   
 
     def clean_response_date(self):
         response_date = self.cleaned_data['response_date']
@@ -45,5 +51,4 @@ class ComplainForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['heading'].widget.attrs.update({'class': 'form-control'})
-        self.fields['description'].widget.attrs.update({'class': 'form-control autoresize-textarea', 'rows': 5})
         self.fields['registered_to'].widget.attrs.update({'class': 'form-control'})

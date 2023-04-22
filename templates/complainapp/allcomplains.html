@@ -49,9 +49,9 @@
         <div class="list-group complain-list" style="border-radius:0px 0px 5px 5px">
             {% for complain in allcomplain %}
             <a class="list-group-item complain-class d-inline-flex" aria-current="true" style="display:inline-block;">
-                <h6 class="complain-subject my-auto ps-3">{{ complain.heading }}</h6>
+                <h6 class="complain-subject my-1 p-2">{{ complain.heading }}</h6>
                 <div class="complain-desc m-2">
-                    <p>{{ complain.description|linebreaksbr }}</p>
+                    <p>{{ complain.description|safe }}</p>
                     <p>Response date: {{ complain.response_date }}</p>
                     
                 </div>

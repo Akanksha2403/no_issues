@@ -39,7 +39,7 @@ class Complain(models.Model):
     
     @property
     def total_like(self):
-        return self.likes.all().count()
+        return self.likes.count()
 
 LIKE_CHOICES = (
     ('like','like'),
