@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 {% load static %}
+{% load urlactive %} 
 
 <head>
   <meta charset="utf-8">
@@ -26,12 +27,12 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="nav-options">
           {% if user.is_authenticated %}
-          <li class="nav-item"> <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a></li>
-          <li> <a class="nav-link" href="{% url 'createComplain' %}">Create complain</a> </li>
+          <li class="nav-item"> <a class="nav-link {% navactive 'index' %} " aria-current="page" href="{% url 'index' %}">Home</a></li>
+          <li class="nav-item"> <a class="nav-link {% navactive 'createComplain' %}" href="{% url 'createComplain' %}">Create complain</a> </li>
           {% if has_designation %} 
-          <li class="nav-item"><a class="nav-link" href="{% url 'respondComplain' %}">Resolve Complains</a></li> 
+          <li class="nav-item"><a class="nav-link {% navactive 'respondComplain' %}" href="{% url 'respondComplain' %}">Resolve Complains</a></li> 
           {% endif %}
-          <li class="nav-item"><a class="nav-link" href="{% url 'allcomplain' %}">Previous Complaints</a></li>
+          <li class="nav-item"><a class="nav-link {% navactive 'allcomplain' %}" href="{% url 'allcomplain' %}">Previous Complaints</a></li>
           {% endif %}
         </ul>
         <div class="d-flex">

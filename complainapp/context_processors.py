@@ -9,3 +9,4 @@ def has_designation(request):
     if user.is_authenticated:
         has_designation = Profile.objects.get(user=user).designation_holder.exists()
     return {'has_designation': has_designation}
+
