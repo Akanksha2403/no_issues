@@ -27,8 +27,6 @@ def check_escalation():
 
 
     
-
-
 def check_designation(user):
     return Profile.objects.get(user=user).designation_holder.exists()
 
