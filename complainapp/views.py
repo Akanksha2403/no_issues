@@ -14,18 +14,26 @@ def check_escalation():
     current_date = timezone.datetime.now()
 
     # Get all active complaints that are due for escalation and have a non-null parent designation
-    complaints = Complain.objects.filter(
+    complains = Complain.objects.filter(
         completed=False,
         response_date__lte=current_date,
         registered_to__parent__isnull=False
     )
 
-    for complaint in complaints:
-        parent_designation = complaint.registered_to.parent
-        complaint.registered_to = parent_designation
-        complaint.description = f"{complaint.description}\n--escalated due to timeout by the {parent_designation.name} at {timezone.now().date()}"
-        complaint.response_date = timezone.now().date() + timezone.timedelta(days=2)
-        complaint.save()
+    for complain in complains:
+        parent_designation = complain.registered_to.parent
+        complain.registered_to = parent_designation
+        str_now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
+        complain.description = (
+            f'<p><strong><span style="color: rgb(53, 152, 219);">'
+            f'On {str_now}, complain escalated due to response date timeout by {parent_designation.name}'
+            f'</span>&nbsp;</strong></p>'
+            f'{complain.description}'
+            f'<blockquote>{complain.description}'
+            f'</blockquote>'
+        )
+        complain.response_date = timezone.now().date() + timezone.timedelta(days=3)
+        complain.save()
 
 
     
