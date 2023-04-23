@@ -126,7 +126,7 @@ def respondComplain(request):
         response_by_email = complain.registered_to.designation_holder.user.email
         complain.description = (
             f'<p><strong><span style="color: rgb(53, 152, 219);">'
-            f'On {str_now}, response by {response_by}: <{response_by_email}>'
+            f'On {str_now}, response by {response_by} &lt;{response_by_email}&gt;:'
             f'</span>&nbsp;</strong></p>'
             f'{response}'
             f'<blockquote>{complain.description}'
@@ -213,7 +213,7 @@ def reopenComplain(request):
             str_now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
             complain.description = (
                 f'<p><strong><span style="color: rgb(53, 152, 219);">'
-                f'On {str_now}, Complain reinitiated by {complain.registered_by.user.get_full_name()} <{complain.registered_by.user.username}>:'
+                f'On {str_now}, complain reinitiated by {complain.registered_by.user.get_full_name()} &lt;{complain.registered_by.user.username}&gt;:'
                 f'</span>&nbsp;</strong></p>'
                 f'{response}'
                 f'<blockquote>{complain.description}'
