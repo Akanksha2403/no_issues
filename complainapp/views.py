@@ -121,12 +121,12 @@ def respondComplain(request):
         complain_id = request.POST.get('complain_id')
         complain = Complain.objects.get(id=complain_id)
         response = request.POST.get('response')
-        now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
+        str_now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
         response_by = complain.registered_to.name
         response_by_email = complain.registered_to.designation_holder.user.email
         complain.description = (
             f'<p><strong><span style="color: rgb(53, 152, 219);">'
-            f'On {now}, response by {response_by}: <{response_by_email}>'
+            f'On {str_now}, response by {response_by}: <{response_by_email}>'
             f'</span>&nbsp;</strong></p>'
             f'{response}'
             f'<blockquote>{complain.description}'
@@ -210,10 +210,10 @@ def reopenComplain(request):
             complain.completed = False
             complain.response_date = form.cleaned_data['response_date']
             response = form.cleaned_data['description']
-            now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
+            str_now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
             complain.description = (
                 f'<p><strong><span style="color: rgb(53, 152, 219);">'
-                f'On {now}, Complain reinitiated by {complain.registered_by.user.get_full_name()} <{complain.registered_by.user.username}>:'
+                f'On {str_now}, Complain reinitiated by {complain.registered_by.user.get_full_name()} <{complain.registered_by.user.username}>:'
                 f'</span>&nbsp;</strong></p>'
                 f'{response}'
                 f'<blockquote>{complain.description}'
