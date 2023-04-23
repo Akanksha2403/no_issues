@@ -40,7 +40,6 @@ class ComplainForm(forms.ModelForm):
         initial=now().date() + timedelta(days=1)
     )
    
-
     def clean_response_date(self):
         response_date = self.cleaned_data['response_date']
         if response_date < forms.DateField().clean(now().date() + timedelta(days=1)):
@@ -52,3 +51,44 @@ class ComplainForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['heading'].widget.attrs.update({'class': 'form-control'})
         self.fields['registered_to'].widget.attrs.update({'class': 'form-control'})
+
+
+class ReopenComplainForm(forms.Form):
+    description = forms.CharField(
+        widget=forms.Textarea({'class': 'form-control tinymce', 'rows': 5}), 
+        required=False, label='Description'
+    )
+    
+    response_date = forms.DateField(
+        label='Response Date',
+        help_text='Select a date at least one day after today',
+        widget=forms.SelectDateWidget(),
+        initial=now().date() + timedelta(days=1)
+    )
+
+    def clean_response_date(self):
+        response_date = self.cleaned_data['response_date']
+        if response_date < forms.DateField().clean(now().date() + timedelta(days=1)):
+            raise forms.ValidationError(
+                "Response date must be at least one day after today.")
+        return response_date
+    
+class EscalateComplainForm(forms.Form): 
+    description = forms.CharField(
+        widget=forms.Textarea({'class': 'form-control tinymce', 'rows': 5, 'placeholder': 'Enter reasons for escalation. NOTE: ESCALATION REASONS NEEDED TO BE GENUINE'}),
+        required=False, label='Reasons for escalations'
+    )
+    
+    response_date = forms.DateField(
+        label='Response Date',
+        help_text='Select a date at least one day after today',
+        widget=forms.SelectDateWidget(),
+        initial=now().date() + timedelta(days=1)
+    )
+
+    def clean_response_date(self):
+        response_date = self.cleaned_data['response_date']
+        if response_date < forms.DateField().clean(now().date() + timedelta(days=1)):
+            raise forms.ValidationError(
+                "Response date must be at least one day after today.")
+        return response_date

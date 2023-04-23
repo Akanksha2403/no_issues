@@ -37,7 +37,12 @@ def index(request):
         profile = Profile.objects.get(user=request.user)
         answered_complains = Complain.objects.filter(registered_by=profile, completed=True)
         unanswered_complains = Complain.objects.filter(registered_by=profile, completed=False)
-        return render(request, 'complainapp/index.html', {'answered_complains': answered_complains, 'unanswered_complains': unanswered_complains})
+        reopencomplainform = ReopenComplainForm()
+        escalatecomplainform = EscalateComplainForm()
+        return render(request, 'complainapp/index.html', {'answered_complains': answered_complains, 
+                                                          'unanswered_complains': unanswered_complains, 
+                                                          'reopencomplainform': reopencomplainform, 
+                                                          'escalatecomplainform': escalatecomplainform})
     else:
         signupform = SignupForm()
         loginform = LoginForm()
@@ -189,3 +194,29 @@ def createComplain(request):
     else:
         complainform = ComplainForm()
         return render(request, "complainapp/createcomplain.html", {'complainform': complainform, 'all_designations': all_designations})
+
+def reopenComplain(request): #needed some work here too... 
+    if request.method == 'POST':
+        complain_id = request.POST.get('complain_id')
+        complain = Complain.objects.get(id=complain_id)
+        complain.completed = False
+        complain.save()
+        messages.success(request, "Complain Reopened Successfully")
+        return redirect('respondComplain')
+    else:
+        messages.error(
+            request, "Some Error Occured, Please try again or contact us")
+        return redirect('respondComplain')
+
+def escalateComplain(request):  #needed some work here
+    if request.method == 'POST':
+        complain_id = request.POST.get('complain_id')
+        complain = Complain.objects.get(id=complain_id)
+        complain.escalated = True
+        complain.save()
+        messages.success(request, "Complain Escalated Successfully")
+        return redirect('respondComplain')
+    else:
+        messages.error(
+            request, "Some Error Occured, Please try again or contact us")
+        return redirect('respondComplain')

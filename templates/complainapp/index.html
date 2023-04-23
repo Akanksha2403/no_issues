@@ -37,7 +37,23 @@
                 </div>
                 <div class="complain-desc m-2">
                     <p>{{ complain.description|safe }}</p>
+                    <div class="m-2">
+                        <form method="post" action="{% ur
+                            l 'reopenComplain'%}" style="display: inline-block;">
+                            {% csrf_token %}
+                            <input type="hidden" name="complain_id" value="{{complain.id}}">
+                            {{ reopencomplainform.as_p }}
+                            <button type="submit" class="btn btn-warning">Reopen Complain</button>
+                        </form>
+                        <form method="post" action="{% url 'escalateComplain' %}" style="display: inline-block;">
+                            {% csrf_token %}
+                            <input type="hidden" name="complain_id" value="{{complain.id}}">
+                            {{ escalatecomplainform.as_p }}
+                            <button type="submit" class="btn btn-danger">Escalate Complain</button>
+                        </form>
+                    </div>
                 </div>
+                {% comment %} create a two buttons, reopen complain and escalate complain {% endcomment %}
             </div>
             {% empty %}
             <p>No complains have been answered yet.</p>
@@ -45,6 +61,18 @@
         </div>
     </div>
 
+    {% block script %}
+    <script>
+        function reopenComplain() {
+            alert("Complain Reopened");
+        }
+
+        function escalateComplain() {
+            alert("Complain Escalated");
+        }
+
+    </script>
+    {% endblock script %}
   
 </div>
 {% endif %}
