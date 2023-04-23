@@ -7,6 +7,8 @@ from django.utils import timezone
 from django.db.models import Q, F
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from datetime import datetime
+
 
 def check_escalation():
     current_date = timezone.datetime.now()
@@ -119,9 +121,12 @@ def respondComplain(request):
         complain_id = request.POST.get('complain_id')
         complain = Complain.objects.get(id=complain_id)
         response = request.POST.get('response')
+        now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
+        response_by = complain.registered_to.name
+        response_by_email = complain.registered_to.designation_holder.user.email
         complain.description = (
             f'<p><strong><span style="color: rgb(53, 152, 219);">'
-            f'Response by {complain.registered_to.name}:'
+            f'On {now}, response by {response_by}: <{response_by_email}>'
             f'</span>&nbsp;</strong></p>'
             f'{response}'
             f'<blockquote>{complain.description}'
@@ -195,18 +200,35 @@ def createComplain(request):
         complainform = ComplainForm()
         return render(request, "complainapp/createcomplain.html", {'complainform': complainform, 'all_designations': all_designations})
 
-def reopenComplain(request): #needed some work here too... 
+
+def reopenComplain(request):
     if request.method == 'POST':
         complain_id = request.POST.get('complain_id')
         complain = Complain.objects.get(id=complain_id)
-        complain.completed = False
-        complain.save()
-        messages.success(request, "Complain Reopened Successfully")
-        return redirect('respondComplain')
+        form = ReopenComplainForm(request.POST)
+        if form.is_valid():
+            complain.completed = False
+            complain.response_date = form.cleaned_data['response_date']
+            response = form.cleaned_data['description']
+            now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
+            complain.description = (
+                f'<p><strong><span style="color: rgb(53, 152, 219);">'
+                f'On {now}, Complain reinitiated by {complain.registered_by.user.get_full_name()} <{complain.registered_by.user.username}>:'
+                f'</span>&nbsp;</strong></p>'
+                f'{response}'
+                f'<blockquote>{complain.description}'
+                f'</blockquote>'
+            )
+            complain.save()
+            messages.success(request, "Complain Reopened Successfully")
+            return redirect('index')
+        else:
+            messages.error(request, "Invalid Form Data. Please try again.")
     else:
-        messages.error(
-            request, "Some Error Occured, Please try again or contact us")
-        return redirect('respondComplain')
+        form = ReopenComplainForm()
+
+    return render(request, 'reopen_complain.html', {'form': form})
+
 
 def escalateComplain(request):  #needed some work here
     if request.method == 'POST':

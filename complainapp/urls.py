@@ -14,5 +14,4 @@ urlpatterns = [
     path('postlike', views.postlike, name='postlike'),
     path('reopencomplain', views.reopenComplain, name='reopenComplain'),
     path('escalatecomplain', views.escalateComplain, name='escalateComplain'),
-    # path('read/<int:id>', views.read, name='read'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

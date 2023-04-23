@@ -38,8 +38,7 @@
                 <div class="complain-desc m-2">
                     <p>{{ complain.description|safe }}</p>
                     <div class="m-2">
-                        <form method="post" action="{% ur
-                            l 'reopenComplain'%}" style="display: inline-block;">
+                        <form method="post" action="{% url 'reopenComplain'%}" style="display: inline-block;">
                             {% csrf_token %}
                             <input type="hidden" name="complain_id" value="{{complain.id}}">
                             {{ reopencomplainform.as_p }}
