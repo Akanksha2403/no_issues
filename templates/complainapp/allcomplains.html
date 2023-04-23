@@ -13,6 +13,7 @@
         color: white; 
         min-width: 70px; 
         display:block;
+        height: 29px; 
     }
     .btn-like:hover{
         cursor: pointer;
@@ -44,12 +45,12 @@
 {% endblock style %}
 {% block body %}
 <div class="content-enclosure">
-    <h1>Welcome to complain portal</h1>
+    <h2 class='text-center'>All complains</h2>
     <div class="complains1" style="min-height:200px">
         <div class="list-group complain-list" style="border-radius:0px 0px 5px 5px">
             {% for complain in allcomplain %}
             <a class="list-group-item complain-class d-inline-flex" aria-current="true" style="display:inline-block;">
-                <h6 class="complain-subject my-1 p-2">{{ complain.heading }}</h6>
+                <div class="complain-subject my-1 p-2">{{ complain.heading }}</div>
                 <div class="complain-desc m-2">
                     <p>{{ complain.description|safe }}</p>
                     <p>Response date: {{ complain.response_date }}</p>

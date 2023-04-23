@@ -15,24 +15,23 @@
                 Complains as {{designation.name}}</h2>
             <div class="list-group complain-list" style="border-radius:0px 0px 5px 5px">
                 {% for complain in complains %}
-                <a href="#" class="list-group-item list-group-item-action complain-class" aria-current="true">
+                <div class="list-group-item list-group-item-action complain-class" aria-current="true">
                     <h6 class="complain-subject">{{ complain.heading }}</h6>
                     <div class="complain-desc">
-                        <p>{{ complain.description|linebreaksbr }}</p>
+                        <p>{{ complain.description|safe }}</p>
                         <form action="{% url 'respondComplain' %}" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="complain_id" value="{{ complain.id }}">
-                            <textarea name="response" class="form-control autoresize-textarea" id="response_field" style="height:100px"></textarea>
+                            <textarea name="response" placeholder="" class="form-control tinymce" id="response_field" style="height:100px"></textarea>
                             <button type="submit" class="btn btn-primary my-2">Respond</button>
                         </form>
                     </div>
-                </a>
+                </div>
                 {% endfor %}
             </div>
         </div>
     </div>
     {% endfor %}
-
 </div>
 
 

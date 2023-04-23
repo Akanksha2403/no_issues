@@ -114,7 +114,14 @@ def respondComplain(request):
         complain_id = request.POST.get('complain_id')
         complain = Complain.objects.get(id=complain_id)
         response = request.POST.get('response')
-        complain.description = complain.description + f"\nresponse by {complain.registered_to.name}: {response}"
+        complain.description = (
+            f'<p><strong><span style="color: rgb(53, 152, 219);">'
+            f'Response by {complain.registered_to.name}:'
+            f'</span>&nbsp;</strong></p>'
+            f'{response}'
+            f'<blockquote>{complain.description}'
+            f'</blockquote>'
+        )
         complain.response_date = now()
         complain.completed = True
         complain.save()

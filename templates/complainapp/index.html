@@ -7,46 +7,45 @@
 {% block body %}
 {% if user.is_authenticated %}
 <div class="content-enclosure">
-    <h1 style="text-align:center;">Your Complains </h1>
-    <div class="complains1" style="min-height:200px">
-        <h2 class="bg-success text-white rounded-top" style="text-align:left; margin:0;padding:5px;">Complains
-            answered</h2>
+    <h2 class='text-center'> Complains made by you </h2>
+    <div class="complains2" style="min-height:200px">
+        <h2 class="bg-danger text-white rounded-top rounded-top px-3 py-2">Complains not answered</h2>
         <div class="list-group complain-list" style="border-radius:0px 0px 5px 5px">
-            {% for complain in answered_complains %}
-            <a href="#" class="list-group-item list-group-item-action complain-class" aria-current="true">
+            {% for complain in unanswered_complains %}
+            <div class="list-group-item list-group-item-action complain-class" aria-current="true">
                 <h6 class="complain-subject m-2">{{ complain.heading }}
                     <small style="font-size: 12px">{{complain.registered_to}}</small>
                 </h6>
                 <div class="complain-desc m-2">
-                    <p>{{ complain.description|linebreaksbr }}</p>
-                    <p>Response date: {{ complain.response_date }}</p>
+                    <p>{{ complain.description|safe }}</p>
+                    <p>Response date to authorities: {{ complain.response_date }}</p>
                 </div>
-            </a>
+            </div>
+            {% empty %}
+            <p>All complains have been answered.</p>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="complains1" style="min-height:200px">
+        <h2 class="bg-success text-white rounded-top px-3 py-2">Complains answered</h2>
+        <div class="list-group complain-list" style="border-radius:0px 0px 5px 5px">
+            {% for complain in answered_complains %}
+            <div class="list-group-item list-group-item-action complain-class" aria-current="true">
+                <div class="complain-subject m-2">{{ complain.heading }}
+                    <small style="font-size: 12px">{{complain.registered_to}}</small>
+                </div>
+                <div class="complain-desc m-2">
+                    <p>{{ complain.description|safe }}</p>
+                </div>
+            </div>
             {% empty %}
             <p>No complains have been answered yet.</p>
             {% endfor %}
         </div>
     </div>
 
-    <div class="complains2" style="min-height:200px">
-        <h2 class="bg-danger text-white rounded-top" style="text-align:left; margin:0;padding:5px;">Complains not
-            answered</h2>
-        <div class="list-group complain-list" style="border-radius:0px 0px 5px 5px">
-            {% for complain in unanswered_complains %}
-            <a href="#" class="list-group-item list-group-item-action complain-class" aria-current="true">
-                <h6 class="complain-subject m-2">{{ complain.heading }}
-                    <small style="font-size: 12px">{{complain.registered_to}}</small>
-                </h6>
-                <div class="complain-desc m-2">
-                    <p>{{ complain.description|linebreaksbr }}</p>
-                    <p>Response date: {{ complain.response_date }}</p>
-                </div>
-            </a>
-            {% empty %}
-            <p>All complains have been answered.</p>
-            {% endfor %}
-        </div>
-    </div>
+  
 </div>
 {% endif %}
 {% endblock body %}

@@ -13,5 +13,8 @@
     padding: 10px 15px;
     color: white;
     margin: 0px; 
-    background-color: rgb(38, 218, 134)
+    background-color: rgb(38, 218, 134);
+}
+.complain-subject.large{
+    width: 200px;
 }
