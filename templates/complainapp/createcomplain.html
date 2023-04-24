@@ -7,12 +7,13 @@
 <style>
     #speech-btn {
         border-radius: 100%;
-       border: none;
+        border: none;
         background-color: #f1f1f1;
     }
 </style>
 {% endblock style %}
 {% block body %}
+<h2> Create Complain </h2>
 {% if user.is_authenticated %}
     {% comment %} create a new complain {% endcomment %}
     <form class="container-sm p-5" action="{% url 'createComplain' %}" method="post"> {% csrf_token %}

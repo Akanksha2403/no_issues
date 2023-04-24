@@ -4,7 +4,7 @@ from django.contrib import messages
 from .forms import *
 from .models import *
 from django.utils import timezone
-from django.db.models import Q, F
+from django.db.models import Q, F, Count
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from datetime import datetime
@@ -14,18 +14,26 @@ def check_escalation():
     current_date = timezone.datetime.now()
 
     # Get all active complaints that are due for escalation and have a non-null parent designation
-    complaints = Complain.objects.filter(
+    complains = Complain.objects.filter(
         completed=False,
         response_date__lte=current_date,
         registered_to__parent__isnull=False
     )
 
-    for complaint in complaints:
-        parent_designation = complaint.registered_to.parent
-        complaint.registered_to = parent_designation
-        complaint.description = f"{complaint.description}\n--escalated due to timeout by the {parent_designation.name} at {timezone.now().date()}"
-        complaint.response_date = timezone.now().date() + timezone.timedelta(days=2)
-        complaint.save()
+    for complain in complains:
+        parent_designation = complain.registered_to.parent
+        complain.registered_to = parent_designation
+        str_now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
+        complain.description = (
+            f'<p><strong><span style="color: rgb(53, 152, 219);">'
+            f'On {str_now}, complain escalated due to response date timeout by {parent_designation.name}'
+            f'</span>&nbsp;</strong></p>'
+            f'{complain.description}'
+            f'<blockquote>{complain.description}'
+            f'</blockquote>'
+        )
+        complain.response_date = timezone.now().date() + timezone.timedelta(days=3)
+        complain.save()
 
 
     
@@ -150,7 +158,8 @@ def respondComplain(request):
     return render(request, "complainapp/respondcomplain.html", {'complains_list': complains_list, 'designation_holder': True})
 
 def allcomplain(request):
-    allcomplain = Complain.objects.all()
+    allcomplain = Complain.objects.all().filter()
+    allcomplain = Complain.objects.filter(completed=False).annotate(like_count=Count('likes')).order_by('-like_count')
    
     return render(request,'complainapp/allcomplains.html',{'allcomplain':allcomplain})
 
@@ -185,10 +194,16 @@ def createComplain(request):
         form = ComplainForm(request.POST)
         if form.is_valid():
             complain = form.save(commit=False)
-            # complain.registered_to = 
+            str_now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
             complain.registered_by = Profile.objects.get(user=request.user)
             complain.registered_date = now()
             complain.completed = False
+            complain.description = (
+                f'<p><strong><span style="color: rgb(53, 152, 219);">'
+                f'On {str_now}, complain registered by {complain.registered_by.user.get_full_name()} &lt;{complain.registered_by.user.username}&gt;:'
+                f'</span>&nbsp;</strong></p>'
+                f'{complain.description}'
+            )
             complain.save()
             messages.success(request, "Complain Registered Successfully")
         else:
@@ -233,12 +248,25 @@ def reopenComplain(request):
 def escalateComplain(request):  #needed some work here
     if request.method == 'POST':
         complain_id = request.POST.get('complain_id')
+        response = request.POST.get('description')
         complain = Complain.objects.get(id=complain_id)
-        complain.escalated = True
+        complain.completed = False
+        str_now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
+        registered_by_user = complain.registered_by.user
+        complain.description = (
+            f'<p><strong><span style="color: rgb(53, 152, 219);">'
+            f'On {str_now}, complain escalated manually by {registered_by_user.get_full_name()} &lt;{registered_by_user.username}&gt; due to:'
+            f'</span>&nbsp;</strong></p>'
+            f'{response}'
+            f'<blockquote>{complain.description}'
+            f'</blockquote>'
+        )
+        if complain.registered_to.parent is None: 
+            messages.error(request, "Complain is already escalated to the highest authority")
+            return redirect('index')
+        complain.registered_to = complain.registered_to.parent
         complain.save()
         messages.success(request, "Complain Escalated Successfully")
-        return redirect('respondComplain')
     else:
-        messages.error(
-            request, "Some Error Occured, Please try again or contact us")
-        return redirect('respondComplain')
+        messages.error(request, "Some Error Occured, Please try again or contact us")
+    return redirect('index')

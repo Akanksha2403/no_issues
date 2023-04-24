@@ -30,9 +30,9 @@ class Complain(models.Model):
     registered_by = models.ForeignKey(Profile, on_delete=models.CASCADE)
     registered_to = models.ForeignKey('Designation', on_delete=models.CASCADE)
     registered_date = models.DateField(default=now, db_index=True)
-    response_date = models.DateField(default=datetime.utcnow() + timedelta(days=1))
+    response_date = models.DateField(default=datetime.utcnow() + timedelta(days=2))
     completed = models.BooleanField(default=False)
-    likes = models.ManyToManyField(User,related_name="postlike", blank=True)
+    likes = models.ManyToManyField(User,related_name="postlike", blank=True, db_index=True)
 
     def __str__(self):
         return self.heading + " to " + self.registered_to.name

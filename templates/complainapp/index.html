@@ -18,7 +18,7 @@
                 </h6>
                 <div class="complain-desc m-2">
                     <p>{{ complain.description|safe }}</p>
-                    <p>Response date to authorities: {{ complain.response_date }}</p>
+                    <p>Deadline for response: {{ complain.response_date }}</p>
                 </div>
             </div>
             {% empty %}
@@ -38,13 +38,15 @@
                 <div class="complain-desc m-2">
                     <p>{{ complain.description|safe }}</p>
                     <div class="m-2">
-                        <form method="post" action="{% url 'reopenComplain'%}" style="display: inline-block;">
+                        <button class="btn btn-warning">Reopen Complain</button>
+                        <button class="btn btn-danger">Escalate Complain</button>
+                        <form method="post" class="reopen-complain-form" action="{% url 'reopenComplain'%}" style="display: inline-block;">
                             {% csrf_token %}
                             <input type="hidden" name="complain_id" value="{{complain.id}}">
                             {{ reopencomplainform.as_p }}
                             <button type="submit" class="btn btn-warning">Reopen Complain</button>
                         </form>
-                        <form method="post" action="{% url 'escalateComplain' %}" style="display: inline-block;">
+                        <form method="post" class="escalate-complain-form" action="{% url 'escalateComplain' %}" style="display: inline-block;">
                             {% csrf_token %}
                             <input type="hidden" name="complain_id" value="{{complain.id}}">
                             {{ escalatecomplainform.as_p }}

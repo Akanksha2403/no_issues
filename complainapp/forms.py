@@ -35,14 +35,14 @@ class ComplainForm(forms.ModelForm):
     )
     response_date = forms.DateField(
         label='Response Date',
-        help_text='Select a date at least one day after today',
+        help_text='Select a date at which is atleast 2 days later',
         widget=forms.SelectDateWidget(),
-        initial=now().date() + timedelta(days=1)
+        initial=now().date() + timedelta(days=2)
     )
    
     def clean_response_date(self):
         response_date = self.cleaned_data['response_date']
-        if response_date < forms.DateField().clean(now().date() + timedelta(days=1)):
+        if response_date < forms.DateField().clean(now().date() + timedelta(days=2)):
             raise forms.ValidationError(
                 "Response date must be at least one day after today.")
         return response_date
@@ -61,14 +61,14 @@ class ReopenComplainForm(forms.Form):
     
     response_date = forms.DateField(
         label='Response Date',
-        help_text='Select a date at least one day after today',
+        help_text='Select a date at which is atleast 2 days later',
         widget=forms.SelectDateWidget(),
-        initial=now().date() + timedelta(days=1)
+        initial=now().date() + timedelta(days=2)
     )
 
     def clean_response_date(self):
         response_date = self.cleaned_data['response_date']
-        if response_date < forms.DateField().clean(now().date() + timedelta(days=1)):
+        if response_date < forms.DateField().clean(now().date() + timedelta(days=2)):
             raise forms.ValidationError(
                 "Response date must be at least one day after today.")
         return response_date
@@ -81,14 +81,14 @@ class EscalateComplainForm(forms.Form):
     
     response_date = forms.DateField(
         label='Response Date',
-        help_text='Select a date at least one day after today',
+        help_text='Select a date at which is atleast 2 days later',
         widget=forms.SelectDateWidget(),
-        initial=now().date() + timedelta(days=1)
+        initial=now().date() + timedelta(days=2)
     )
 
     def clean_response_date(self):
         response_date = self.cleaned_data['response_date']
-        if response_date < forms.DateField().clean(now().date() + timedelta(days=1)):
+        if response_date < forms.DateField().clean(now().date() + timedelta(days=2)):
             raise forms.ValidationError(
                 "Response date must be at least one day after today.")
         return response_date
