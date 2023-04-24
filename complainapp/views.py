@@ -35,7 +35,6 @@ def check_escalation():
         complain.save()
 
 
-    
 def check_designation(user):
     return Profile.objects.get(user=user).designation_holder.exists()
 
@@ -44,13 +43,15 @@ def index(request):
     check_escalation()
     if (request.user.is_authenticated):
         profile = Profile.objects.get(user=request.user)
-        answered_complains = Complain.objects.filter(registered_by=profile, completed=True)
-        unanswered_complains = Complain.objects.filter(registered_by=profile, completed=False)
+        answered_complains = Complain.objects.filter(
+            registered_by=profile, completed=True)
+        unanswered_complains = Complain.objects.filter(
+            registered_by=profile, completed=False)
         reopencomplainform = ReopenComplainForm()
         escalatecomplainform = EscalateComplainForm()
-        return render(request, 'complainapp/index.html', {'answered_complains': answered_complains, 
-                                                          'unanswered_complains': unanswered_complains, 
-                                                          'reopencomplainform': reopencomplainform, 
+        return render(request, 'complainapp/index.html', {'answered_complains': answered_complains,
+                                                          'unanswered_complains': unanswered_complains,
+                                                          'reopencomplainform': reopencomplainform,
                                                           'escalatecomplainform': escalatecomplainform})
     else:
         signupform = SignupForm()
@@ -156,28 +157,31 @@ def respondComplain(request):
             registered_to=designation, completed=False)
     return render(request, "complainapp/respondcomplain.html", {'complains_list': complains_list, 'designation_holder': True})
 
+
 @login_required(login_url='/')
 def allcomplain(request):
     allcomplain = Complain.objects.all().filter()
-    allcomplain = Complain.objects.filter(completed=False).annotate(like_count=Count('likes')).order_by('-like_count')
-   
-    return render(request,'complainapp/allcomplains.html',{'allcomplain':allcomplain})
+    allcomplain = Complain.objects.filter(completed=False).annotate(
+        like_count=Count('likes')).order_by('-like_count')
+
+    return render(request, 'complainapp/allcomplains.html', {'allcomplain': allcomplain})
+
 
 def postlike(request):
     user = request.user
-    if(request.method == 'POST'):
+    if (request.method == 'POST'):
         post_id = request.POST.get('cid')
         post_obj = Complain.objects.get(id=post_id)
 
-        if(user in post_obj.likes.all()):
+        if (user in post_obj.likes.all()):
             post_obj.likes.remove(user)
         else:
             post_obj.likes.add(user)
-        
-        like, created = Like.objects.get_or_create(user=user, post_id = post_id)
+
+        like, created = Like.objects.get_or_create(user=user, post_id=post_id)
 
         if not created:
-            if(like.value == 'like'):
+            if (like.value == 'like'):
                 like.value = 'unlike'
             else:
                 like.value = 'like'
@@ -245,7 +249,7 @@ def reopenComplain(request):
     return render(request, 'reopen_complain.html', {'form': form})
 
 
-def escalateComplain(request):  #needed some work here
+def escalateComplain(request):  # needed some work here
     if request.method == 'POST':
         complain_id = request.POST.get('complain_id')
         response = request.POST.get('description')
@@ -261,12 +265,14 @@ def escalateComplain(request):  #needed some work here
             f'<blockquote>{complain.description}'
             f'</blockquote>'
         )
-        if complain.registered_to.parent is None: 
-            messages.error(request, "Complain is already escalated to the highest authority")
+        if complain.registered_to.parent is None:
+            messages.error(
+                request, "Complain is already escalated to the highest authority")
             return redirect('index')
         complain.registered_to = complain.registered_to.parent
         complain.save()
         messages.success(request, "Complain Escalated Successfully")
     else:
-        messages.error(request, "Some Error Occured, Please try again or contact us")
+        messages.error(
+            request, "Some Error Occured, Please try again or contact us")
     return redirect('index')
