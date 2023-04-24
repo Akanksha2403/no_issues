@@ -7,21 +7,23 @@
         border-radius: 15px;
         padding-block: 3px;
         padding-inline: 9px; 
-        border: 1px solid #0d2e60; 
         transition: all 0.2s ease;
+        border: 0px;
         line-height: initial; 
         background-color: #0D6EFD; 
         color: white; 
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
         min-width: 70px; 
         display:block;
         height: 29px; 
     }
     .btn-like:hover{
         cursor: pointer;
-        border: 1px solid whitesmoke;
+        box-shadow:0px 15px 20px rgba(197, 190, 250, 0.4);
+        transform: translateY(-2px);
     }
     .liking{
-        color: white;; 
+        color: white;
     }
     .like-count{
         margin-left:5px; 
@@ -30,18 +32,6 @@
         display: flex;
         align-items: center;
     }
-    {% comment %} .complain-desc {
-        display: none;
-    }
-    .complain-subject{
-        display:flex; 
-    }
-    .complain-subject:hover{
-        cursor: pointer;    
-    } {% endcomment %}
-    {% comment %} .list-group-item {
-        padding: 0!important;
-    } {% endcomment %}
 </style>
 {% endblock style %}
 {% block body %}

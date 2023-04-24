@@ -156,6 +156,7 @@ def respondComplain(request):
             registered_to=designation, completed=False)
     return render(request, "complainapp/respondcomplain.html", {'complains_list': complains_list, 'designation_holder': True})
 
+@login_required(login_url='/')
 def allcomplain(request):
     allcomplain = Complain.objects.all().filter()
     allcomplain = Complain.objects.filter(completed=False).annotate(like_count=Count('likes')).order_by('-like_count')
