@@ -248,12 +248,25 @@ def reopenComplain(request):
 def escalateComplain(request):  #needed some work here
     if request.method == 'POST':
         complain_id = request.POST.get('complain_id')
+        response = request.POST.get('description')
         complain = Complain.objects.get(id=complain_id)
-        complain.escalated = True
+        complain.completed = False
+        str_now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
+        registered_by_user = complain.registered_by.user
+        complain.description = (
+            f'<p><strong><span style="color: rgb(53, 152, 219);">'
+            f'On {str_now}, complain escalated manually by {registered_by_user.get_full_name()} &lt;{registered_by_user.username}&gt; due to:'
+            f'</span>&nbsp;</strong></p>'
+            f'{response}'
+            f'<blockquote>{complain.description}'
+            f'</blockquote>'
+        )
+        if complain.registered_to.parent is None: 
+            messages.error(request, "Complain is already escalated to the highest authority")
+            return redirect('index')
+        complain.registered_to = complain.registered_to.parent
         complain.save()
         messages.success(request, "Complain Escalated Successfully")
-        return redirect('respondComplain')
     else:
-        messages.error(
-            request, "Some Error Occured, Please try again or contact us")
-        return redirect('respondComplain')
+        messages.error(request, "Some Error Occured, Please try again or contact us")
+    return redirect('index')
