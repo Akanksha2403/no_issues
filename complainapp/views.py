@@ -28,7 +28,6 @@ def check_escalation():
             f'<p><strong><span style="color: rgb(53, 152, 219);">'
             f'On {str_now}, complain escalated due to response date timeout by {parent_designation.name}'
             f'</span>&nbsp;</strong></p>'
-            f'{complain.description}'
             f'<blockquote>{complain.description}'
             f'</blockquote>'
         )
