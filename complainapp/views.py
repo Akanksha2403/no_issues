@@ -4,7 +4,7 @@ from django.contrib import messages
 from .forms import *
 from .models import *
 from django.utils import timezone
-from django.db.models import Q, F
+from django.db.models import Q, F, Count
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from datetime import datetime
@@ -158,7 +158,8 @@ def respondComplain(request):
     return render(request, "complainapp/respondcomplain.html", {'complains_list': complains_list, 'designation_holder': True})
 
 def allcomplain(request):
-    allcomplain = Complain.objects.all()
+    allcomplain = Complain.objects.all().filter()
+    allcomplain = Complain.objects.filter(completed=False).annotate(like_count=Count('likes')).order_by('-like_count')
    
     return render(request,'complainapp/allcomplains.html',{'allcomplain':allcomplain})
 
@@ -193,10 +194,16 @@ def createComplain(request):
         form = ComplainForm(request.POST)
         if form.is_valid():
             complain = form.save(commit=False)
-            # complain.registered_to = 
+            str_now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
             complain.registered_by = Profile.objects.get(user=request.user)
             complain.registered_date = now()
             complain.completed = False
+            complain.description = (
+                f'<p><strong><span style="color: rgb(53, 152, 219);">'
+                f'On {str_now}, complain registered by {complain.registered_by.user.get_full_name()} &lt;{complain.registered_by.user.username}&gt;:'
+                f'</span>&nbsp;</strong></p>'
+                f'{complain.description}'
+            )
             complain.save()
             messages.success(request, "Complain Registered Successfully")
         else:
