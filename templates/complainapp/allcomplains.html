@@ -1,6 +1,7 @@
 {% extends 'complainapp/basic.html' %}
 {% load static %}
 {% block style %}
+<link rel="stylesheet" href="{% static '/css/complainapp/respondcomplain.css' %}">
 <style>
     .btn-like{
         border-radius: 15px;
@@ -29,7 +30,7 @@
         display: flex;
         align-items: center;
     }
-    .complain-desc {
+    {% comment %} .complain-desc {
         display: none;
     }
     .complain-subject{
@@ -37,10 +38,10 @@
     }
     .complain-subject:hover{
         cursor: pointer;    
-    }
-    .list-group-item {
+    } {% endcomment %}
+    {% comment %} .list-group-item {
         padding: 0!important;
-    }
+    } {% endcomment %}
 </style>
 {% endblock style %}
 {% block body %}
@@ -49,9 +50,9 @@
     <div class="complains1" style="min-height:200px">
         <div class="list-group complain-list" style="border-radius:0px 0px 5px 5px">
             {% for complain in allcomplain %}
-            <a class="list-group-item complain-class d-inline-flex" aria-current="true" style="display:inline-block;">
-                <div class="complain-subject my-1 p-2">{{ complain.heading }}</div>
-                <div class="complain-desc m-2">
+            <div class="list-group-item complain-class" aria-current="true">
+                <h6 class="complain-subject">{{ complain.heading }}</h6>
+                <div class="complain-desc">
                     <p>{{ complain.description|safe }}</p>
                     <p>Response date: {{ complain.response_date }}</p>
                 </div>
@@ -65,7 +66,7 @@
                         {% endif %}
                     </div>        
                 </form>
-            </a>
+            </div>
             {% endfor %}
         </div>
     </div>

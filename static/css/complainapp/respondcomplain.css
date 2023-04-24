@@ -4,6 +4,7 @@
 }
 .complain-class:hover{
     transition: all 0.2s ease;
+    cursor: pointer;
 }
 .list-group-item {
     padding: 0!important;
