@@ -35,7 +35,7 @@ def check_escalation():
         complain.save()
 
 
-    
+  
 def check_designation(user):
     return Profile.objects.get(user=user).designation_holder.exists()
 
@@ -115,7 +115,7 @@ def handleSignup(request):
         request, "Some Error Occured, Please try again or contact us")
     return redirect('index')
 
-
+@login_required(login_url='/')
 def handleLogout(request):
     logout(request)
     messages.success(request, "Successfully Logged Out")
@@ -163,6 +163,7 @@ def allcomplain(request):
    
     return render(request,'complainapp/allcomplains.html',{'allcomplain':allcomplain})
 
+@login_required(login_url='/')
 def postlike(request):
     user = request.user
     if(request.method == 'POST'):
@@ -185,10 +186,8 @@ def postlike(request):
 
     return redirect('allcomplain')
 
-
 @login_required(login_url='/')
 def createComplain(request):
-    myprofile = Profile.objects.get(user=request.user)
     all_designations = Designation.objects.all()
     if request.method == 'POST':
         form = ComplainForm(request.POST)
@@ -207,15 +206,14 @@ def createComplain(request):
             complain.save()
             messages.success(request, "Complain Registered Successfully")
         else:
-            messages.error(
-                request, "Some Error Occured, Please try again or contact us")
+            for error in form.errors: messages.error(request, form.errors[error])
         return redirect('createComplain')
 
     else:
         complainform = ComplainForm()
         return render(request, "complainapp/createcomplain.html", {'complainform': complainform, 'all_designations': all_designations})
 
-
+@login_required(login_url='/')
 def reopenComplain(request):
     if request.method == 'POST':
         complain_id = request.POST.get('complain_id')
@@ -225,6 +223,7 @@ def reopenComplain(request):
             complain.completed = False
             complain.response_date = form.cleaned_data['response_date']
             response = form.cleaned_data['description']
+
             str_now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
             complain.description = (
                 f'<p><strong><span style="color: rgb(53, 152, 219);">'
@@ -238,13 +237,13 @@ def reopenComplain(request):
             messages.success(request, "Complain Reopened Successfully")
             return redirect('index')
         else:
-            messages.error(request, "Invalid Form Data. Please try again.")
+            for error in form.errors: messages.error(request, form.errors[error])
     else:
         form = ReopenComplainForm()
 
-    return render(request, 'reopen_complain.html', {'form': form})
+    return redirect('index')
 
-
+@login_required(login_url='/')
 def escalateComplain(request):  #needed some work here
     if request.method == 'POST':
         complain_id = request.POST.get('complain_id')

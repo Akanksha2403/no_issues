@@ -18,7 +18,7 @@
                 </h6>
                 <div class="complain-desc m-2">
                     <p>{{ complain.description|safe }}</p>
-                    <p>Deadline for response: {{ complain.response_date }}</p>
+                    <p class="fst-italic"> Deadline for response: {{ complain.response_date }}</p>
                 </div>
             </div>
             {% empty %}
@@ -38,23 +38,22 @@
                 <div class="complain-desc m-2">
                     <p>{{ complain.description|safe }}</p>
                     <div class="m-2">
-                        <button class="btn btn-warning">Reopen Complain</button>
-                        <button class="btn btn-danger">Escalate Complain</button>
-                        <form method="post" class="reopen-complain-form" action="{% url 'reopenComplain'%}" style="display: inline-block;">
+                        <form method="post" class="reopen-complain-form" action="{% url 'reopenComplain'%}">
                             {% csrf_token %}
                             <input type="hidden" name="complain_id" value="{{complain.id}}">
                             {{ reopencomplainform.as_p }}
                             <button type="submit" class="btn btn-warning">Reopen Complain</button>
                         </form>
-                        <form method="post" class="escalate-complain-form" action="{% url 'escalateComplain' %}" style="display: inline-block;">
+                        <form method="post" class="escalate-complain-form" action="{% url 'escalateComplain' %}">
                             {% csrf_token %}
                             <input type="hidden" name="complain_id" value="{{complain.id}}">
                             {{ escalatecomplainform.as_p }}
                             <button type="submit" class="btn btn-danger">Escalate Complain</button>
                         </form>
+                        <button class="btn btn-warning reopen-complain my-2">Reopen Complain</button>
+                        <button class="btn btn-danger escalate-complain my-2">Escalate Complain</button>
                     </div>
                 </div>
-                {% comment %} create a two buttons, reopen complain and escalate complain {% endcomment %}
             </div>
             {% empty %}
             <p>No complains have been answered yet.</p>
@@ -64,17 +63,25 @@
 
     {% block script %}
     <script>
-        function reopenComplain() {
-            alert("Complain Reopened");
-        }
-
-        function escalateComplain() {
-            alert("Complain Escalated");
-        }
-
+        $(document).ready(function() {
+            $('.reopen-complain-form, .escalate-complain-form').hide();
+            $('.reopen-complain').click(function() {
+                $(this).hide();
+                $(this).parent().children('.escalate-complain').show()
+                $(this).parent().children('.escalate-complain-form').hide()
+                $(this).parent().children('.reopen-complain-form').show();
+            });
+          
+            $('.escalate-complain').click(function() {
+                $(this).hide();
+                $(this).parent().children('.reopen-complain').show()
+                $(this).parent().children('.reopen-complain-form').hide()
+                $(this).parent().children('.escalate-complain-form').show();
+            });
+        });
+          
     </script>
     {% endblock script %}
-  
 </div>
 {% endif %}
 {% endblock body %}

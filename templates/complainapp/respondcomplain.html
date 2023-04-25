@@ -18,6 +18,7 @@
                 <div class="list-group-item list-group-item-action complain-class" aria-current="true">
                     <h6 class="complain-subject">{{ complain.heading }}</h6>
                     <div class="complain-desc">
+                        <p class="fst-italic">Deadline for response: {{ complain.response_date }}</p>
                         <p>{{ complain.description|safe }}</p>
                         <form action="{% url 'respondComplain' %}" method="post">
                             {% csrf_token %}
