@@ -10,9 +10,17 @@ from django.urls import reverse
 from datetime import datetime
 from .isoffensive import is_offensive
 
-def check_escalation():
-    current_date = timezone.datetime.now()
 
+TODAY_DATE = None
+def check_escalation():
+    global TODAY_DATE
+    # if today's date is not none and today's date is equal to current date, then return
+    if TODAY_DATE is not None and TODAY_DATE == timezone.datetime.now().date():
+        return
+    # else update today's date
+    TODAY_DATE = timezone.datetime.now().date()
+
+    current_date = timezone.datetime.now()
     # Get all active complaints that are due for escalation and have a non-null parent designation
     complains = Complain.objects.filter(
         completed=False,
@@ -34,14 +42,19 @@ def check_escalation():
         complain.response_date = timezone.now().date() + timezone.timedelta(days=3)
         complain.save()
 
+def check_escalation_wrapper(func):
+    def wrapper(*args, **kwargs):
+        check_escalation()
+        return func(*args, **kwargs)
+    return wrapper
+
   
 def check_designation(user):
     return Profile.objects.get(user=user).designation_holder.exists()
 
-
+@check_escalation_wrapper
 def index(request):
-    check_escalation()
-    if (request.user.is_authenticated):
+    if request.user.is_authenticated:
         profile = Profile.objects.get(user=request.user)
         answered_complains = Complain.objects.filter(registered_by=profile, completed=True)
         unanswered_complains = Complain.objects.filter(registered_by=profile, completed=False)
@@ -58,7 +71,7 @@ def index(request):
 
 
 def handleLogin(request):
-    if (request.method == "POST"):
+    if request.method == "POST":
         loginform = LoginForm(request.POST)
         if (loginform.is_valid()):
             email = loginform.cleaned_data['email']
@@ -82,9 +95,9 @@ def handleLogin(request):
 
 
 def handleSignup(request):
-    if (request.method == "POST"):
+    if request.method == "POST":
         signupform = SignupForm(request.POST)
-        if (signupform.is_valid()):
+        if signupform.is_valid():
             first_name = signupform.cleaned_data['first_name']
             last_name = signupform.cleaned_data['last_name']
             email = signupform.cleaned_data['email']
@@ -122,8 +135,9 @@ def handleLogout(request):
 
 
 @login_required(login_url='/')
+@check_escalation_wrapper
 def respondComplain(request):
-    if (request.method == "POST"):
+    if request.method == "POST":
         complain_id = request.POST.get('complain_id')
         complain = Complain.objects.get(id=complain_id)
         response = request.POST.get('response')
@@ -159,10 +173,9 @@ def respondComplain(request):
     return render(request, "complainapp/respondcomplain.html", {'complains_list': complains_list, 'designation_holder': True})
 
 @login_required(login_url='/')
+@check_escalation_wrapper
 def allcomplain(request):
-    allcomplain = Complain.objects.all().filter()
     allcomplain = Complain.objects.filter(completed=False).annotate(like_count=Count('likes')).order_by('-like_count')
-   
     return render(request,'complainapp/allcomplains.html',{'allcomplain':allcomplain})
 
 @login_required(login_url='/')
@@ -213,7 +226,6 @@ def createComplain(request):
         else:
             for error in form.errors: messages.error(request, form.errors[error])
         return redirect('createComplain')
-
     else:
         complainform = ComplainForm()
         return render(request, "complainapp/createcomplain.html", {'complainform': complainform, 'all_designations': all_designations})

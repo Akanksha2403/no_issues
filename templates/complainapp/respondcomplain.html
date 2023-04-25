@@ -4,9 +4,13 @@
 {% block style %}
 <link rel="stylesheet" href="{% static '/css/complainapp/respondcomplain.css' %}">
 {% endblock style %}
+{% block title %}
+<title>Resolve Complain</title>
+{% endblock title %}
 {% block body %}
 {% if user.is_authenticated %}
 <div class="content-enclosure">
+    <h2 class="text-center">Resolve Complain</h2>
     {% comment %} complain-list will be in dictionary with key = designation and value = complains {% endcomment %}
     {% for designation, complains in complains_list.items %}
     <div class="designation-wrap-complains">
@@ -28,6 +32,8 @@
                         </form>
                     </div>
                 </div>
+                {% empty %}
+                <p>No complains to be registered yet.</p>
                 {% endfor %}
             </div>
         </div>

@@ -3,46 +3,26 @@
 {% load static %}
 {% block style %}
 <link rel="stylesheet" href="{% static '/css/complainapp/index.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-lJfPZ+IaG6N1Z6JNtsjHseB/L2xNf+PuznYJ9AJW/71E/nCm6r+Uv0DkLW8+eow4J4yjquGvXLeM+d8HpsQGlQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
-    #speech-btn {
-        border-radius: 100%;
-        border: none;
-        background-color: #f1f1f1;
+    .create-complain-form{
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        {% comment %} box shadow should be downwards side {% endcomment %}
+        box-shadow: 0px 4px 20px #ccc;
+        padding: 10px;
     }
 </style>
 {% endblock style %}
+{% block title %}
+<title>Create Complain</title>
+{% endblock title %}
 {% block body %}
-<h2> Create Complain </h2>
+<h2 class="text-center">Create Complain</h2>
 {% if user.is_authenticated %}
     {% comment %} create a new complain {% endcomment %}
-    <form class="container-sm p-5" action="{% url 'createComplain' %}" method="post"> {% csrf_token %}
+    <form class="container-sm p-5" class="create-complain-form" action="{% url 'createComplain' %}" method="post"> {% csrf_token %}
         {{complainform.as_p}}
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 {% endif %}
 {% endblock body %}
-
-{% block script %}
-<script>
-    const descriptionField = document.getElementById("id_description");
-    const buttonHTML = '<button type="button" id="speech-btn"><i class="fa fa-microphone" aria-hidden="true"></i></button>';
-    descriptionField.insertAdjacentHTML('beforebegin', buttonHTML);
-</script>
-<script>
-    document.getElementById("speech-btn").addEventListener("click", () => {
-      const recognition = new webkitSpeechRecognition();
-      recognition.lang = "en-US";
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-      
-      recognition.addEventListener("result", (event) => {
-         const message= descriptionField.value;
-        const speechResult = event.results[0][0].transcript;
-        descriptionField.value = message+ " "+  speechResult;
-      });
-      
-      recognition.start();
-    });
-  </script>
-{% endblock script %}
