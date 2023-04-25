@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import *
@@ -8,7 +8,7 @@ from django.db.models import Q, F, Count
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from datetime import datetime
-
+from .isoffensive import is_offensive
 
 def check_escalation():
     current_date = timezone.datetime.now()
@@ -33,7 +33,6 @@ def check_escalation():
         )
         complain.response_date = timezone.now().date() + timezone.timedelta(days=3)
         complain.save()
-
 
   
 def check_designation(user):
@@ -128,6 +127,9 @@ def respondComplain(request):
         complain_id = request.POST.get('complain_id')
         complain = Complain.objects.get(id=complain_id)
         response = request.POST.get('response')
+        if is_offensive(response): 
+            messages.warning(request, "Response contains offensive words !!!")
+            return redirect('respondComplain')
         str_now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
         response_by = complain.registered_to.name
         response_by_email = complain.registered_to.designation_holder.user.email
@@ -197,6 +199,9 @@ def createComplain(request):
             complain.registered_by = Profile.objects.get(user=request.user)
             complain.registered_date = now()
             complain.completed = False
+            if (is_offensive(complain.description)): 
+                messages.warning(request, "Response contains offensive words !!!")
+                return redirect('createComplain')
             complain.description = (
                 f'<p><strong><span style="color: rgb(53, 152, 219);">'
                 f'On {str_now}, complain registered by {complain.registered_by.user.get_full_name()} &lt;{complain.registered_by.user.username}&gt;:'
@@ -223,7 +228,9 @@ def reopenComplain(request):
             complain.completed = False
             complain.response_date = form.cleaned_data['response_date']
             response = form.cleaned_data['description']
-
+            if is_offensive(response): 
+                messages.warning(request, "Response contains offensive words !!!")
+                return redirect('index')
             str_now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
             complain.description = (
                 f'<p><strong><span style="color: rgb(53, 152, 219);">'
@@ -248,6 +255,9 @@ def escalateComplain(request):  #needed some work here
     if request.method == 'POST':
         complain_id = request.POST.get('complain_id')
         response = request.POST.get('description')
+        if is_offensive(response):
+            messages.warning(request, "Response contains offensive words !!!")
+            return redirect('index')
         complain = Complain.objects.get(id=complain_id)
         complain.completed = False
         str_now = datetime.now().strftime('%a, %d %b %Y at %H:%M')
