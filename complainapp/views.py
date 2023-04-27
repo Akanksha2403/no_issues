@@ -9,11 +9,17 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from datetime import datetime
 from .isoffensive import is_offensive
-
+import threading
 
 TODAY_DATE = None
+lock = threading.Lock()
 def check_escalation():
     global TODAY_DATE
+    # Use a lock to ensure that only one thread can access and modify TODAY_DATE at a time
+    with lock:
+        if TODAY_DATE is not None and TODAY_DATE == timezone.datetime.now().date():
+            return
+        TODAY_DATE = timezone.datetime.now().date()
     # if today's date is not none and today's date is equal to current date, then return
     if TODAY_DATE is not None and TODAY_DATE == timezone.datetime.now().date():
         return
