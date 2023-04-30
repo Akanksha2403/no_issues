@@ -20,11 +20,6 @@ def check_escalation():
         if TODAY_DATE is not None and TODAY_DATE == timezone.datetime.now().date():
             return
         TODAY_DATE = timezone.datetime.now().date()
-    # if today's date is not none and today's date is equal to current date, then return
-    if TODAY_DATE is not None and TODAY_DATE == timezone.datetime.now().date():
-        return
-    # else update today's date
-    TODAY_DATE = timezone.datetime.now().date()
 
     current_date = timezone.datetime.now()
     # Get all active complaints that are due for escalation and have a non-null parent designation
